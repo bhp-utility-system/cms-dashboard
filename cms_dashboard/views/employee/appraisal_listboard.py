@@ -38,7 +38,7 @@ class AppraisalListBoardView(
         """Returns a non persistent obj
         """
         performance_imp_cls = django_apps.get_model('bhp_personnel.performanceimpplan')
-        pio=None
+        pio = None
         try:
             performance_imp = performance_imp_cls.objects.get(
                 contract=self.contract_obj)

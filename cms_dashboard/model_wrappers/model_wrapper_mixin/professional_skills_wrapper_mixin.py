@@ -32,7 +32,8 @@ class ProfessionalSkillsWrapperMixin:
         """
         options = dict(
             emp_identifier=self.object.emp_identifier,
-            contract=self.object.contract)
+            contract=self.object.contract,
+            assessment_period_type=self.object.review)
         return options
 
     @property
@@ -42,5 +43,6 @@ class ProfessionalSkillsWrapperMixin:
         """
         options = dict(
             emp_identifier=self.object.emp_identifier,
-            contract=self.object.contract)
+            contract=self.object.contract,
+            assessment_period_type=self.object.review)
         return options

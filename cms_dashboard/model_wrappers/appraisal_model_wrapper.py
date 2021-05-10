@@ -59,7 +59,8 @@ class AppraisalModelWrapper(EmployeeModelWrapperMixin,
     @property
     def kpa_list(self):
         wrapped_kpas = []
-        kpas = self.kpa_cls.objects.filter(contract=self.contract)
+        kpas = self.kpa_cls.objects.filter(contract=self.contract,
+                                           assessment_period_type=self.object.review)
         for kpa in kpas:
             wrapped_kpas.append(KpaModelWrapper(kpa))
         return wrapped_kpas
@@ -82,7 +83,8 @@ class AppraisalModelWrapper(EmployeeModelWrapperMixin,
             model_cls = django_apps.get_model(f'bhp_personnel.{model}')
 
             try:
-                model_obj = model_cls.objects.get(contract=self.contract)
+                model_obj = model_cls.objects.get(contract=self.contract,
+                                                  assessment_period_type=self.object.review)
             except model_cls.DoesNotExist:
                 pass
             else:
@@ -102,10 +104,11 @@ class AppraisalModelWrapper(EmployeeModelWrapperMixin,
             if total > 0:
                 total *= 0.8
 
-            key_performance_cls = django_apps.get_model('bhp_personnel.keyPerformancearea')
+            key_performance_cls = django_apps.get_model('bhp_personnel.keyperformancearea')
 
             key_performance_objs = key_performance_cls.objects.filter(
-                    contract=self.contract)
+                    contract=self.contract,
+                    assessment_period_type=self.object.review)
 
             total_performance_score = 0
             for obj in key_performance_objs:
@@ -114,4 +117,4 @@ class AppraisalModelWrapper(EmployeeModelWrapperMixin,
 
             if total_performance_score > 0:
                 total += ((total_performance_score / key_performance_objs.count()) * 0.2)
-            return total
+            return round(total, 2)
