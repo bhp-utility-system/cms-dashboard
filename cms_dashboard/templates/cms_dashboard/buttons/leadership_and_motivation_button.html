@@ -1,0 +1,14 @@
+ <a style="text-align:left" id="kpa_add_{{ emp_identifier }}"
+ 	title="{{ title }}"
+
+ 	{% if leadership_and_motivation_obj %}
+            class="btn btn-success btn-sm" data-toggle="tooltip"  data-placement="right"
+            href="{{ add_leadership_and_motivation_href }}">
+    {% else %}
+            class="btn btn-warning btn-md" data-toggle="tooltip"  data-placement="right"
+        href="{{ add_leadership_and_motivation_href }}">
+    {% endif %}
+
+     	Team Leadership And Motivation
+
+ </a>

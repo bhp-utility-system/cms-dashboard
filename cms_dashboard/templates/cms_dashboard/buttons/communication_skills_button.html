@@ -1,0 +1,13 @@
+ <a style="text-align:left" id="kpa_add_{{ emp_identifier }}"
+ 	title="{{ title }}"
+ 	{% if communication_obj %}
+            class="btn btn-success btn-sm" data-toggle="tooltip"  data-placement="right"
+            href="{{ add_communication_skills_href }}">
+    {% else %}
+            class="btn btn-warning btn-md" data-toggle="tooltip"  data-placement="right"
+        href="{{ add_communication_skills_href }}">
+    {% endif %}
+
+     	Communication Skills
+
+ </a>

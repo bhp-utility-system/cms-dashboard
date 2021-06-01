@@ -1,0 +1,14 @@
+ <a style="text-align:left" id="kpa_add_{{ emp_identifier }}"
+ 	title="{{ title }}"
+
+ 	{% if planning_skills_obj %}
+            class="btn btn-success btn-sm" data-toggle="tooltip"  data-placement="right"
+            href="{{ add_planning_skills_href }}">
+    {% else %}
+            class="btn btn-warning btn-md" data-toggle="tooltip"  data-placement="right"
+        href="{{ add_planning_skills_href }}">
+    {% endif %}
+
+     	Planning and Organising Skills
+
+ </a>

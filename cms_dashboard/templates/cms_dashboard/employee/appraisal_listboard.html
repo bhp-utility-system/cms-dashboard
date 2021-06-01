@@ -1,0 +1,277 @@
+{% extends listboard_base_template %}
+{% load admin_urls %}
+{% load edc_base_extras %}
+{% load cms_dashboard_extras %}
+{% load edc_dashboard_extras %}
+{% load static %}
+
+{% block extra-css %}
+{{ block.super }}
+	<link type="text/css" rel="stylesheet" href="{% static 'cms_dashboard/css/report.css' %}">
+	<link href="{% static 'cms_dashboard/css/bootstrap-table.min.css' %}"rel=stylesheet>
+    <link type="text/css" rel="stylesheet" href="{% static 'cms_dashboard/css/popup.css' %}">
+
+{% endblock extra-css %}
+
+{% block extra-scripts %}
+{{ block.super }}
+	<script src="{% static 'cms_dashboard/js/tableExport.min.js' %}"></script>
+	<script src="{% static 'cms_dashboard/js/bootstrap-table.min.js' %}"></script>
+	<script src="{% static 'cms_dashboard/js/bootstrap-table-export.min.js' %}"></script>
+	<script src="{% static 'cms_dashboard/js/bootstrap-table-filter-control.min.js' %}"></script>
+{% endblock %}
+
+{% block main %}
+
+<div class="dropdown">
+  <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-key" ></i>
+    PERFORMANCE SCORE KEY <i class="fa fa-caret-down"></i>
+  </button>
+  <div class="dropdown-menu" aria-labelledby="dropdownMenu2" style=" padding-bottom:0px;">
+
+	  <ul class="list-group">
+		  <li class="list-group-item disabled">Exceptional Performance <span class="badge">5</span></li>
+		  <li class="list-group-item disabled">Exceeds Expectations <span class="badge">4</span></li>
+		  <li class="list-group-item disabled">Competent Meets Standards <span class="badge">3</span></li>
+		  <li class="list-group-item disabled">Weak and Inconsistent Performance &nbsp; <span class="badge">2</span></li>
+		  <li class="list-group-item disabled">Unacceptable Performance <span class="badge">1</span></li>
+		  <li class="list-group-item disabled">Not Rated <span class="badge">NR</span></li>
+		</ul>
+
+  </div>
+    
+    <div class="btn-group">
+  <button type="button" class="btn btn-info dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-key"></i> SCALES KEY <i class="fa fa-caret-down"></i></button>
+    <span class="sr-only">Toggle Dropdown</span>
+  </button>
+  <div class="dropdown-menu">
+    
+		  <li> <a class="dropdown-item" id="myBtn">Performance Rating Scale</a></li>
+		  <li> <a class="dropdown-item" id="Btn">Performance Scoring & Classification Scale</a> </li>
+		  <li> <a class="dropdown-item" id="Btn3">Competent Meets Standards </a></li>
+  </div>
+</div>
+  </div>
+
+<div id="myModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close" onclick="document.getElementById('myModal').style.display='none'"><i class="fas fa-window-close" style="--fa-primary-color: tomato"></i></span>
+    <embed src="{% static 'cms_dashboard/doc/Performance Rating Scale.pdf' %}" type="application/pdf" width="100%" height="95%">
+</object>
+  </div>
+
+</div>
+
+<div id="myModal2" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close" onclick="document.getElementById('myModal2').style.display='none'"><i class="fas fa-window-close" style="--fa-primary-color: tomato"></i></span>
+    <embed src="{% static 'cms_dashboard/doc/Performance Scoring.pdf' %}" type="application/pdf" width="100%" height="95%">
+</object>
+  </div>
+
+</div>
+
+<div id="myModal3" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close" onclick="document.getElementById('myModal3').style.display='none'"><i class="fas fa-window-close" style="--fa-primary-color: tomato"></i></span>
+    <embed src="{% static 'cms_dashboard/doc/Timeline.pdf' %}" type="application/pdf" width="100%" height="95%">
+</object>
+  </div>
+
+</div>
+
+<script>
+    // Get the modal
+var modal = document.getElementById("myModal");
+
+// Get the button that opens the modal
+var btn = document.getElementById("myBtn");
+
+// When the user clicks the button, open the modal
+btn.onclick = function() {
+  modal.style.display = "block";
+}
+
+// Get the modal
+var modal2 = document.getElementById("myModal2");
+
+// Get the button that opens the modal
+var btn2 = document.getElementById("Btn");
+
+// When the user clicks the button, open the modal
+btn2.onclick = function() {
+  modal2.style.display = "block";
+}
+// Get the modal
+var modal3 = document.getElementById("myModal3");
+
+// Get the button that opens the modal
+var btn3 = document.getElementById("Btn3");
+
+// When the user clicks the button, open the modal
+btn3.onclick = function() {
+  modal3.style.display = "block";
+}
+
+</script>
+<style>
+div.scrollmenu {
+  overflow-x: scroll;
+  white-space: nowrap;
+}
+
+div.scrollmenu a {
+  display: inline-block;
+}
+</style>
+<div class="row">
+	<div id="toolbar">
+		<h3 style="font-weight:200"><img src="" width="20"> Employee Appraisals</h3>
+	</div>
+</div>
+ <!-- start listboard main block-->
+ <div class="panel-group">
+  <div class="panel panel-{{ listboard_panel_style }}">
+  <div class="panel-heading">
+
+    <!-- begin search form -->
+   <!--  <span class="pull-right">
+      {% block listboard_search_form %}
+        {% include 'timesheet_dashboard/search_form.html' %}
+      {% endblock listboard_search_form %}
+    </span>
+    <!-- end search form -->
+
+    {% block listboard_panel %}
+    	<!-- start listboard main block-->
+		<a id="btn-dashboard" class="btn btn-sm btn-default" role="button"
+     		title="Add Appraisal" href="{{ appraisal_add_url }}">
+     		<i class="fa fa-plus fa-sm"></i> Add Appraisal
+     	</a>&nbsp&nbsp
+     	{% add_performance_imp_button performance_imp_obj %}
+    {% endblock listboard_panel %}
+
+   </div> <!--end panel heading -->
+<!-- begin table -->
+<div class="table table-responsive" style="overflow:inherit">
+<table class="table table-condensed table-hover small">
+<thead>
+
+{% block listboard_table_header %}
+     <!-- begin results header -->
+    <th>#</th>
+    <th style="width:10px;" data-field='contract' data-sortable='true' data-filter-control="input">Contract</th>
+    <th data-field='overall_perf_score' data-sortable='true' data-filter-control="input">Review</th>
+    <th data-field='final_assess_score' data-sortable='true' data-filter-control="input">Final Assessment Score</th>
+    <!-- end results header -->
+{% endblock listboard_table_header %}
+
+</thead><tbody>
+
+{% block listboard_table_body %}
+{% for result in results %}
+
+<tr>
+
+	<td>
+
+  <div class="btn-group">
+    {% edit_appraisal_button result %}
+    <div class="btn-group">
+      <button class="btn btn-success btn-sm dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Section 1: KPA's <span class="caret"></span>
+      </button>
+      <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
+	        {% for kpa in result.kpa_list %}
+              <li style="color:white;"><a class="btn btn-info btn-sm " role="button"
+			href="{{ kpa.get_absolute_url }}">
+				 {{ kpa.kpa_nd_objective }}
+              </a></li>
+	        {% endfor %}
+      </div>
+    </div>
+      <div class="btn-group">
+        <button class="btn btn-warning btn-sm dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Section 2: Professional Skills <span class="caret"></span>
+        </button>
+      <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
+
+		<li>
+			{% strategic_orientation_button result %}
+		</li>
+		<li>
+			{% results_focus_button result %}
+		</li>
+		<li>
+			{% leadership_and_motivation_button result %}
+		</li>
+		<li>
+			{% innovation_and_creativity_button result %}
+		</li>
+		<li>
+			{% planning_skills_button result %}
+		</li>
+		<li>
+			{% interpersonal_skills_button result %}
+		</li>
+		<li>
+			{% communication_skills_button result %}
+		</li>
+		<li>
+			{% knowledge_and_productivity_button result %}
+		</li>
+		<li>
+			{% quality_of_work_button result %}
+		</li>        
+      </ul>
+  </div>
+  </div>
+</div>
+
+	</td>
+
+	{% block listboard_table_button_column %}
+
+	{% endblock listboard_table_button_column %}
+
+	{% block listboard_table_columns %}
+	<td nowrap>{{ result.object.contract }}</td>
+	<td nowrap>{{ result.object.get_review_display }}</td>
+	<td nowrap>
+		<span class="badge badge-pill badge-info">{{ result.overall_score }}</span>
+	</td>
+	{% endblock listboard_table_columns %}
+</tr>
+
+{% endfor %}
+{% endblock listboard_table_body %}
+
+</tbody></table>
+
+<!-- begin spacer rows -->
+<table>
+<tr><td>&nbsp;</td></tr>
+<tr><td>&nbsp;</td></tr>
+<tr><td>&nbsp;</td></tr>
+<tr><td>&nbsp;</td></tr>
+<tr><td>&nbsp;</td></tr>
+</table>
+<!-- end spacer rows -->
+
+</div><!-- end table -->
+
+{% paginator_row %}
+
+</div>  <!--end panel -->
+</div> <!--end panel-group -->
+<!-- end listboard main block -->
+
+<div id="dialog" style="display: none">
+</div>
+{% endblock main %}

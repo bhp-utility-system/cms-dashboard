@@ -1,0 +1,13 @@
+ <a id="jobdescription_add_{{ emp_identifier }}"
+ 	title="{{ title }}"
+ 	{% if job_description_model_obj %}
+        class="btn btn-success btn-sm" data-toggle="tooltip"  data-placement="right"
+        href="{{ add_jobdescription_href }}">
+        <i class="fa fa-edit"></i> 
+    {% else %}
+        class="btn btn-warning btn-sm" data-toggle="tooltip"  data-placement="right"
+        href="{{ add_jobdescription_href }}">
+        <i class="fa fa-plus-circle"></i> 
+    {% endif %}
+    Job Description
+ </a>
