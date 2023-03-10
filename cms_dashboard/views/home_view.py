@@ -1,6 +1,8 @@
 from django.apps import apps as django_apps
 from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user
+from django.db.models import Q
+from django.utils import timezone
 from django.views.generic import TemplateView
 from edc_base.view_mixins import EdcBaseViewMixin
 from edc_navbar import NavbarViewMixin
@@ -58,6 +60,13 @@ class HomeView(EdcBaseViewMixin, NavbarViewMixin, TemplateView):
         pi_supervisees = Pi.objects.filter(
             supervisor__email=current_user.email)
 
+        end_date_range = timezone.now() + timezone.timedelta(days=90)
+
+        due_contracts = Contract.objects.filter(
+            Q(end_date__gte=timezone.now()) & Q(end_date__lte=end_date_range)
+        )
+
+
         context.update(
             total=total,
             employees_total=employees.count(),
@@ -74,6 +83,7 @@ class HomeView(EdcBaseViewMixin, NavbarViewMixin, TemplateView):
             active_pis=active_pis.count(),
             active_consultants=active_consultants.count(),
             active_contracts=active_contracts,
+            due_contracts=due_contracts.count(),
 
             # Complete Contracts
             employee_completed=employee_completed.count(),
