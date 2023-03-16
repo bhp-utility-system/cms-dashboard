@@ -1,0 +1,150 @@
+
+
+<div class="row" style="padding: 10px">
+<div class="col-md-10">
+    <div id="chart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+</div>
+    <div class="col-md-12">
+        <h3 style="text-align:center">Contracts</h3>
+
+        <div class="row">
+            <div class="col-md-3">
+
+                <ul class="nav nav-stacked">
+                    <li><strong>From Date</strong></li>
+                    <li>
+                        <input type="text" class="form-control" placeholder="Minimum date" id="min" name="min">
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <ul class="nav nav-stacked">
+                    <li><strong>To Date</strong></li>
+
+                    <li><input type="text" class="form-control" placeholder="Maximum date" id="max" name="max"></li>
+                </ul>
+            </div>
+        </div>
+
+        <table id="table" class="table table-bordered table-sm ">
+            <thead class="thead-dark">
+            <tr>
+                <th>#</th>
+                <th>Personnel Identifier</th>
+                <th>Owner Name</th>
+                <th>Duration</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for contract in contracts %}
+                <tr>
+                    <td> {{ forloop.counter }} </td>
+                    <td>{{ contract.identifier }} </td>
+                    <td>{{ contract.first_name }}</td>
+                    <td>{{ contract.duration }}</td>
+                    <td>{{ contract.start_date }}</td>
+                    <td>{{ contract.end_date }}</td>
+                    <td>{{ contract.status }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+
+
+        </table>
+    </div>
+
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.2/moment.min.js"></script>
+<script src="https://cdn.datatables.net/datetime/1.4.0/js/dataTables.dateTime.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/datetime/1.4.0/css/dataTables.dateTime.min.css">
+<script>
+    var minDate, maxDate;
+
+    $.fn.dataTable.ext.search.push(
+        function( settings, data, dataIndex ) {
+            var min = minDate.val();
+            var max = maxDate.val();
+            var date = new Date( data[4] );
+
+
+            if (
+                ( min === null && max === null ) ||
+                ( min === null && date <= max ) ||
+                ( min <= date   && max === null ) ||
+                ( min <= date   && date <= max )
+            ) {
+                return true;
+            }
+            return false;
+        }
+    );
+
+    $(document).ready(function() {
+        // Create date inputs
+        minDate = new DateTime($('#min'), {
+            format: 'MMMM Do YYYY'
+        });
+        maxDate = new DateTime($('#max'), {
+            format: 'MMMM Do YYYY'
+        });
+
+        // DataTables initialisation
+        var table = $('#table').DataTable();
+
+        // Refilter the table
+        $('#min, #max').on('change', function () {
+            table.draw();
+        });
+    });
+</script>
+
+<script>
+
+    const categories = [
+            {% for item in due_contracts_per_department %}
+                "{{ item.department__dept_name }}",
+            {% endfor %}
+        ];
+    const counts = [
+        {% for item in due_contracts_per_department %}
+            {{ item.count }},
+        {% endfor %}
+    ];
+
+    // Create the chart
+    Highcharts.chart('chart', {
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Expiring Contracts per Department'
+        },
+        xAxis: {
+            categories: categories,
+            title: {
+                text: 'Department'
+            }
+        },
+        yAxis: {
+            min: 0,
+            max:30,
+            title: {
+                text: 'Count'
+            }
+        },
+        series: [{
+            name: 'Count',
+            data: counts
+        }]
+    });
+
+</script>
