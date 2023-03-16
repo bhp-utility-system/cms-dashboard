@@ -2,16 +2,6 @@
   
   <div class="row">
   <div class="col-md-12">
-    <figure class="highcharts-figure">
-      <div id="age_distribution"></div>
-      <p class="highcharts-description">
-      Chart showing employee age distribution across multiple studies
-    </p>
-    </figure>
-  </div>
-  <hr>
-
-  <div class="col-md-12">
       <h3 style="text-align:center">Employees Per Study</h3>
         <table class="table table-bordered table-sm ">
             <thead class="thead-dark">
@@ -26,7 +16,8 @@
                 <tr class="clickable" data-toggle="collapse"
                   data-target="#group-of-rows-1-{{ study.0 }}" aria-expanded="false"
                     aria-controls="group-of-rows-1">
-                  <td><i class="fa fa-folder"></i> {{study.0}}</td> 
+                  <td><i class="fa fa-folder"></i> {{study.0}}</td>
+                <td> Total Employees: {{study.1|length}}</td>
                 </tr>
                 <tbody id="group-of-rows-1-{{ study.0 }}" class="collapse">
 
@@ -49,64 +40,5 @@
 
 </div>
 
-<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script type="application/javascript">
-    
-  window.onload = () => {
-    Highcharts.chart('age_distribution', {
-
-      chart: {
-        type: 'boxplot'
-      },
-
-      title: {
-        text: 'Age-distribution across studies'
-      },
-
-      legend: {
-        enabled: true
-      },
-
-      xAxis: {
-        categories: [{% for study in age_dist %} '{{study.0}}',{% endfor %}],
-        title: {
-          text: 'Studies'
-        }
-      },
-
-      yAxis: {
-        title: {
-          text: 'Age distribution'
-        },
-      },
-
-      series: [{
-        name: 'Observations',
-        data: [{% for study in age_dist %} {{study.1}}, {% endfor %}],
-
-      }, 
-      {
-        name: 'Outliers',
-        color: Highcharts.getOptions().colors[0],
-        type: 'scatter',
-        data: {{study_age_outliers.1 | safe}} ,
-        marker: {
-          fillColor: 'white',
-          lineWidth: 1,
-          lineColor: Highcharts.getOptions().colors[0]
-        },
-        tooltip: {
-          pointFormat: 'Observation: {point.y}'
-        }
-      }
-    ]
-
-    });
-
-
-  };
-
-
-</script>
 
 
