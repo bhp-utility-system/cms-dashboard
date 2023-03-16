@@ -3,3 +3,4 @@ from .employees_per_dept_mixin import EmployeePerDeptGraphMixin
 from .nationality_per_dept_mixin import NationalityMixin
 from .employees_per_study_mixin import EmployeesPerStudyMixin
 from .age_distribution_box_plot_mixin import AgeDistributionPerStudyMixin
+from .employee_contract_mixin import EmployeeContractMixin
