@@ -14,9 +14,13 @@ class EmployeeContractMixin(EdcBaseViewMixin):
         return django_apps.get_model('bhp_personnel.contract')
 
     @property
-    def get_contracts(self):
+    def get_contract_employee_list(self):
         contracts = self.contract_model_cls.objects.all()
-        return contracts
+        contract_employee_list = []
+        for contract in contracts:
+            employee = Employee.objects.filter(identifier=contract.identifier).first()
+            contract_employee_list.append({'employee': employee, 'contract': contract})
+        return contract_employee_list
 
     @property
     def get_due_contracts(self):
@@ -48,7 +52,7 @@ class EmployeeContractMixin(EdcBaseViewMixin):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update(
-            contracts=self.get_contracts,
+            contracts=self.get_contract_employee_list,
             due_contracts=self.get_due_contracts,
             due_contracts_per_department=self.get_due_contracts_by_department
         )

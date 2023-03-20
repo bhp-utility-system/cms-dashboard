@@ -39,15 +39,15 @@
             </tr>
             </thead>
             <tbody>
-            {% for contract in contracts %}
+            {% for obj in contracts %}
                 <tr>
                     <td> {{ forloop.counter }} </td>
-                    <td>{{ contract.identifier }} </td>
-                    <td>{{ contract.first_name }}</td>
-                    <td>{{ contract.duration }}</td>
-                    <td>{{ contract.start_date }}</td>
-                    <td>{{ contract.end_date }}</td>
-                    <td>{{ contract.status }}</td>
+                    <td>{{ obj.contract.identifier }} </td>
+                    <td>{{ obj.employee.first_name }} {{ obj.employee.last_name }}</td>
+                    <td>{{ obj.contract.duration }}</td>
+                    <td>{{ obj.contract.start_date }}</td>
+                    <td>{{ obj.contract.end_date }}</td>
+                    <td>{{ obj.contract.status }}</td>
                 </tr>
             {% endfor %}
             </tbody>
