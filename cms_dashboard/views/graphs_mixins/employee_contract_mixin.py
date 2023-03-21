@@ -3,6 +3,7 @@ from django.apps import apps as django_apps
 from django.db.models import Count
 from edc_base.view_mixins import EdcBaseViewMixin
 from edc_utils import get_utcnow
+from ...model_wrappers import ContractModelWrapper
 
 from bhp_personnel.models import Employee
 
@@ -15,12 +16,7 @@ class EmployeeContractMixin(EdcBaseViewMixin):
 
     @property
     def get_contract_employee_list(self):
-        contracts = self.contract_model_cls.objects.all()
-        contract_employee_list = []
-        for contract in contracts:
-            employee = Employee.objects.filter(identifier=contract.identifier).first()
-            contract_employee_list.append({'employee': employee, 'contract': contract})
-        return contract_employee_list
+        return [ContractModelWrapper(model_obj=i) for i in self.contract_model_cls.objects.all()]
 
     @property
     def get_due_contracts(self):
