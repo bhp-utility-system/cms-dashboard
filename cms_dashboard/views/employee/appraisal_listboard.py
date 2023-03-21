@@ -59,6 +59,7 @@ class AppraisalListBoardView(
                       emp_identifier=self.contract_obj.identifier))
         context.update(
             contract=contract,
+            contract_obj =self.contract_obj,
             appraisal_add_url=wrapped.href,
             performance_imp_obj=self.performance_imp_obj
         )
