@@ -99,7 +99,9 @@
                         </table>
                     </div>
                 </div>
-                {% if renewal_intent.intent == YES and renewal_intent.comment == '' %}
+
+                {% if request.user.email == employee.supervisor.email and renewal_intent.intent == YES  %}
+                    {% if renewal_intent.comment == '' %}
                     <div class="well">
                         {{ employee.first_name }} {{ employee.last_name }}'s contract is
                         expiring
@@ -115,6 +117,7 @@
                             </button>
                         </form>
                     </div>
+                    {% endif %}
                 {% endif %}
             </div>
 
