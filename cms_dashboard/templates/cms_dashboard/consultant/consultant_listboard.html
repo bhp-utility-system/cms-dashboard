@@ -19,8 +19,6 @@
     <th>Consultant Identifier</th>
     <th>Consultant Name</th>
     <th>Email</th>
-    <th>Modified</th>
-    <th>Host</th>
     <!-- end results header -->
 {% endblock listboard_table_header %}
 
@@ -43,7 +41,6 @@
     <td>{{ result.identifier }} </td>
     <td nowrap>{{ result.first_name }} {{ result.middle_name }} {{ result.last_name }}</td>
     <td nowrap>{{ result.email }}</td>
-    <td nowrap>{{ result.object.modified|date:"SHORT_DATETIME_FORMAT" }}</td>  
-    <td nowrap>{{ result.hostname_created }}</td>
+
 
 {% endblock listboard_table_columns %}

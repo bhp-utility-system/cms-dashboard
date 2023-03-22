@@ -1,3 +1,4 @@
+from dateutil.relativedelta import relativedelta
 from edc_base.utils import get_utcnow
 from edc_dashboard.listboard_filter import ListboardFilter, \
     ListboardViewFilters
@@ -34,7 +35,7 @@ class ListBoardFilters(ListboardViewFilters):
     due_date = ListboardFilter(
         label='3-Months Due',
         position=12,
-        lookup={'due_date__lt': get_utcnow().date()})
+        lookup={'end_date__range': [get_utcnow().date(), get_utcnow().date() + relativedelta(months=3)]})
 
 
 class EmployeeListBoardFilters(ListboardViewFilters):

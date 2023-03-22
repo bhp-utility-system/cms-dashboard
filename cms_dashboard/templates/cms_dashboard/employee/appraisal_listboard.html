@@ -6,69 +6,101 @@
 {% load static %}
 
 {% block extra-css %}
-{{ block.super }}
-	<link type="text/css" rel="stylesheet" href="{% static 'cms_dashboard/css/report.css' %}">
-	<link href="{% static 'cms_dashboard/css/bootstrap-table.min.css' %}"rel=stylesheet>
-    <link type="text/css" rel="stylesheet" href="{% static 'cms_dashboard/css/popup.css' %}">
+    {{ block.super }}
+    <link type="text/css" rel="stylesheet"
+          href="{% static 'cms_dashboard/css/report.css' %}">
+    <link href="{% static 'cms_dashboard/css/bootstrap-table.min.css' %}" rel=stylesheet>
+    <link type="text/css" rel="stylesheet"
+          href="{% static 'cms_dashboard/css/popup.css' %}">
 
 {% endblock extra-css %}
 
 {% block extra-scripts %}
-{{ block.super }}
-	<script src="{% static 'cms_dashboard/js/tableExport.min.js' %}"></script>
-	<script src="{% static 'cms_dashboard/js/bootstrap-table.min.js' %}"></script>
-	<script src="{% static 'cms_dashboard/js/bootstrap-table-export.min.js' %}"></script>
-	<script src="{% static 'cms_dashboard/js/bootstrap-table-filter-control.min.js' %}"></script>
+    {{ block.super }}
+    <script src="{% static 'cms_dashboard/js/tableExport.min.js' %}"></script>
+    <script src="{% static 'cms_dashboard/js/bootstrap-table.min.js' %}"></script>
+    <script src="{% static 'cms_dashboard/js/bootstrap-table-export.min.js' %}"></script>
+    <script src="{% static 'cms_dashboard/js/bootstrap-table-filter-control.min.js' %}"></script>
 {% endblock %}
 
 {% block main %}
+    {% if contract_due and not renewal_intent %}
+        <div class="alert alert-danger alert-sm" role="alert">
+            This contract is expiring in {{ contract_obj.end_date }}
+            {% if employee_obj.email == request.user.email %}
+                Do you intend on renewing your contract?
+                {% renew_intent_button renewal_intent_wrapped_obj %}
+            {% endif %}
+        </div>
+    {% endif %}
 
-<div class="dropdown">
-  <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-key" ></i>
-    PERFORMANCE SCORE KEY <i class="fa fa-caret-down"></i>
-  </button>
-  <div class="dropdown-menu" aria-labelledby="dropdownMenu2" style=" padding-bottom:0px;">
+    <div class="dropdown">
+        <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenu2"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
+                class="fas fa-key"></i>
+            PERFORMANCE SCORE KEY <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenu2"
+             style=" padding-bottom:0px;">
 
-	  <ul class="list-group">
-		  <li class="list-group-item disabled">Exceptional Performance <span class="badge">5</span></li>
-		  <li class="list-group-item disabled">Exceeds Expectations <span class="badge">4</span></li>
-		  <li class="list-group-item disabled">Competent Meets Standards <span class="badge">3</span></li>
-		  <li class="list-group-item disabled">Weak and Inconsistent Performance &nbsp; <span class="badge">2</span></li>
-		  <li class="list-group-item disabled">Unacceptable Performance <span class="badge">1</span></li>
-		  <li class="list-group-item disabled">Not Rated <span class="badge">NR</span></li>
-		</ul>
+            <ul class="list-group">
+                <li class="list-group-item disabled">Exceptional Performance <span
+                        class="badge">5</span></li>
+                <li class="list-group-item disabled">Exceeds Expectations <span
+                        class="badge">4</span></li>
+                <li class="list-group-item disabled">Competent Meets Standards <span
+                        class="badge">3</span></li>
+                <li class="list-group-item disabled">Weak and Inconsistent Performance
+                    &nbsp; <span class="badge">2</span></li>
+                <li class="list-group-item disabled">Unacceptable Performance <span
+                        class="badge">1</span></li>
+                <li class="list-group-item disabled">Not Rated <span
+                        class="badge">NR</span></li>
+            </ul>
 
-  </div>
-    
-    <div class="btn-group">
-  <button type="button" class="btn btn-info dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-key"></i> SCALES KEY <i class="fa fa-caret-down"></i></button>
-    <span class="sr-only">Toggle Dropdown</span>
-  </button>
-  <div class="dropdown-menu">
-    
-		  <li> <a class="dropdown-item" id="myBtn">Performance Rating Scale</a></li>
-		  <li> <a class="dropdown-item" id="Btn">Performance Scoring & Classification Scale</a> </li>
-		  <li> <a class="dropdown-item" id="Btn3">Competent Meets Standards </a></li>
-  </div>
-</div>
-  </div>
+        </div>
 
-<div id="myModal" class="modal">
+        <div class="btn-group">
+            <button type="button"
+                    class="btn btn-info dropdown-toggle dropdown-toggle-split"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
+                    class="fas fa-key"></i> SCALES KEY <i class="fa fa-caret-down"></i>
+            </button>
+            <span class="sr-only">Toggle Dropdown</span>
+            </button>
+            <div class="dropdown-menu">
 
-  <!-- Modal content -->
-  <div class="modal-content">
-    <span class="close" onclick="document.getElementById('myModal').style.display='none'"><i class="fas fa-window-close" style="--fa-primary-color: tomato"></i></span>
-    <embed src="{% static 'cms_dashboard/doc/Performance Rating Scale.pdf' %}" type="application/pdf" width="100%" height="95%">
-</object>
-  </div>
+                <li><a class="dropdown-item" id="myBtn">Performance Rating Scale</a></li>
+                <li><a class="dropdown-item" id="Btn">Performance Scoring & Classification
+                    Scale</a></li>
+                <li><a class="dropdown-item" id="Btn3">Competent Meets Standards </a></li>
+            </div>
+        </div>
+    </div>
 
-</div>
+    <div id="myModal" class="modal">
 
-<div id="myModal2" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close"
+                  onclick="document.getElementById('myModal').style.display='none'"><i
+                    class="fas fa-window-close"
+                    style="--fa-primary-color: tomato"></i></span>
+            <embed src="{% static 'cms_dashboard/doc/Performance Rating Scale.pdf' %}"
+                   type="application/pdf" width="100%" height="95%">
+            </object>
+        </div>
 
-  <!-- Modal content -->
-  <div class="modal-content">
-    <span class="close" onclick="document.getElementById('myModal2').style.display='none'"><i class="fas fa-window-close" style="--fa-primary-color: tomato"></i></span>
+    </div>
+
+    <div id="myModal2" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close"
+                  onclick="document.getElementById('myModal2').style.display='none'"><i
+                    class="fas fa-window-close"
+                    style="--fa-primary-color: tomato"></i></span>
     <embed src="{% static 'cms_dashboard/doc/Performance Scoring.pdf' %}" type="application/pdf" width="100%" height="95%">
 </object>
   </div>
