@@ -25,6 +25,15 @@ def edit_appraisal_button(model_wrapper):
         title=' '.join(title))
 
 
+@register.inclusion_tag('cms_dashboard/buttons/edit_renewal_intent_button.html')
+def edit_renewal_intent_button(model_wrapper):
+    title = ['Edit renewal intent form.']
+    return dict(
+        # identifier=model_wrapper.object.identifier,
+        href=model_wrapper.href,
+        title=' '.join(title))
+
+
 @register.inclusion_tag('cms_dashboard/buttons/edit_details_button.html')
 def edit_details_button(model_wrapper):
     title = ['Edit details form.']
@@ -50,6 +59,14 @@ def kpa_button(model_wrapper):
         kpa_object=model_wrapper.object)
 
 
+@register.inclusion_tag('cms_dashboard/buttons/renewal_intent_button.html')
+def renewal_intent_button(model_wrapper):
+    return dict(
+        add_renewal_intent_href=model_wrapper.href,
+        emp_identifier=model_wrapper.object.emp_identifier,
+        renewal_intent_object=model_wrapper.object)
+
+
 @register.inclusion_tag('cms_dashboard/buttons/contracting_button.html')
 def contracting_button(model_wrapper):
     return dict(
@@ -57,7 +74,7 @@ def contracting_button(model_wrapper):
         identifier=model_wrapper.contracting.identifier,
         contracting_model_obj=model_wrapper.contracting_model_obj
         # contracting_model_obj=model_wrapper.contract_model_obj
-        )
+    )
 
 
 @register.inclusion_tag('cms_dashboard/buttons/strategic_orientation_button.html')
