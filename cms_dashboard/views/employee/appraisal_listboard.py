@@ -1,21 +1,23 @@
 import re
 from django.apps import apps as django_apps
+from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+from django.http import HttpResponseRedirect
 from django.utils.decorators import method_decorator
 from edc_base.view_mixins import EdcBaseViewMixin
 from edc_dashboard.view_mixins import ListboardFilterViewMixin, SearchFormViewMixin
 from edc_dashboard.views import ListboardView
 from edc_navbar import NavbarViewMixin
+from edc_utils import get_utcnow
 
 from ...model_wrappers import AppraisalModelWrapper, PerformanceImpModelWrapper
 
 
 class AppraisalListBoardView(
-        NavbarViewMixin, EdcBaseViewMixin, ListboardFilterViewMixin,
-        SearchFormViewMixin, ListboardView):
-
+    NavbarViewMixin, EdcBaseViewMixin, ListboardFilterViewMixin,
+    SearchFormViewMixin, ListboardView):
     listboard_template = 'appraisal_listboard_template'
     listboard_url = 'appraisal_listboard_url'
     listboard_panel_style = 'info'
@@ -57,9 +59,13 @@ class AppraisalListBoardView(
         wrapped = self.model_wrapper_cls(
             model_cls(contract=self.contract_obj,
                       emp_identifier=self.contract_obj.identifier))
+
         context.update(
             contract=contract,
-            contract_obj =self.contract_obj,
+            employee_obj=self.employee,
+            contract_obj=self.contract_obj,
+            contract_due=self.is_contract_due,
+            renewal_intent=self.get_renewal_intent,
             appraisal_add_url=wrapped.href,
             performance_imp_obj=self.performance_imp_obj
         )
@@ -82,6 +88,21 @@ class AppraisalListBoardView(
             q = Q(first_name__exact=search_term)
         return q
 
+    def post(self, request, *args, **kwargs):
+        if request.method == 'POST':
+            intent = self.request.POST.get('intent')
+            renewal_intent_cls = django_apps.get_model('bhp_personnel.renewalintent')
+            employee_obj = self.employee
+
+            if employee_obj.email == self.request.user.email and\
+                    self.get_renewal_intent is None:
+                renewal_intent_cls.objects.create(
+                    contract=self.contract_obj,
+                    intent=intent
+                )
+                messages.success(request, 'Your renewal intent has been successfully submitted.')
+        return HttpResponseRedirect(self.request.path)
+
     @property
     def contract_obj(self):
         contract_model_cls = django_apps.get_model('bhp_personnel.contract')
@@ -92,3 +113,26 @@ class AppraisalListBoardView(
             raise ValidationError('Please make sure this contract exists.')
         else:
             return contract
+
+    @property
+    def is_contract_due(self):
+        return self.contract_obj.due_date < get_utcnow().date()
+
+    @property
+    def get_renewal_intent(self):
+        if hasattr(self.contract_obj, 'renewalintent'):
+            return self.contract_obj.renewalintent
+        else:
+            return None
+    @property
+    def employee(self):
+        """Return an employee.
+        """
+        identifier = self.contract_obj.identifier
+        try:
+            employee = django_apps.get_model('bhp_personnel.employee').objects.get(identifier=identifier)
+        except django_apps.get_model('bhp_personnel.employee').DoesNotExist:
+            raise ValidationError(
+                f"Employee with identifier {identifier} does not exist")
+        else:
+            return employee
