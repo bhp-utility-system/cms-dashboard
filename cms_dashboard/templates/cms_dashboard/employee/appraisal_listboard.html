@@ -22,12 +22,18 @@
 {% endblock %}
 
 {% block main %}
-    {% if request.user|has_group:"HR" %}
-    <div class="alert alert-danger alert-sm" role="alert">
-      The contract is ending in {{ contract_obj.end_date}}, do you intend on renewing?
-        <button class="btn btn-primary" onclick="yes()">Yes</button>
-        <button class="btn btn-secondary" onclick="no()">No</button>
-    </div>
+    {% if contract_due and not renewal_intent %}
+        <div class="alert alert-danger alert-sm" role="alert">
+          This contract is expiring in {{ contract_obj.end_date}}
+            {% if employee_obj.email == request.user.email %}
+                Do you intend on renewing contract?
+                <form method="post" action=".">
+                    {% csrf_token %}
+                    <button type="submit" name="intent" value="Yes" class="btn btn-primary">Yes</button>
+                    <button type="submit" name="intent" value="No" class="btn btn-secondary">No</button>
+                </form>
+            {% endif %}
+        </div>
     {% endif %}
 
 <div class="dropdown">
