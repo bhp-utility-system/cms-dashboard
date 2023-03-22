@@ -1,18 +1,20 @@
 import re
+
 from django.apps import apps as django_apps
 from django.contrib import messages
-from django.core.exceptions import ValidationError
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.utils.decorators import method_decorator
+from edc_base import get_utcnow
 from edc_base.view_mixins import EdcBaseViewMixin
 from edc_dashboard.view_mixins import ListboardFilterViewMixin, SearchFormViewMixin
 from edc_dashboard.views import ListboardView
 from edc_navbar import NavbarViewMixin
-from edc_utils import get_utcnow
 
-from ...model_wrappers import AppraisalModelWrapper, PerformanceImpModelWrapper
+from ...model_wrappers import AppraisalModelWrapper, PerformanceImpModelWrapper, \
+    RenewalIntentModelWrapper
 
 
 class AppraisalListBoardView(
@@ -67,7 +69,9 @@ class AppraisalListBoardView(
             contract_due=self.is_contract_due,
             renewal_intent=self.get_renewal_intent,
             appraisal_add_url=wrapped.href,
-            performance_imp_obj=self.performance_imp_obj
+            performance_imp_obj=self.performance_imp_obj,
+            renewal_intent_wrapped_obj=self.renewal_intent_wrapped_obj,
+            renewal_intent_obj=self.renewal_intent_obj
         )
         return context
 
@@ -130,7 +134,8 @@ class AppraisalListBoardView(
         """
         identifier = self.contract_obj.identifier
         try:
-            employee = django_apps.get_model('bhp_personnel.employee').objects.get(identifier=identifier)
+            employee = django_apps.get_model('bhp_personnel.employee').objects.get(
+                identifier=identifier)
         except django_apps.get_model('bhp_personnel.employee').DoesNotExist:
             raise ValidationError(
                 f"Employee with identifier {identifier} does not exist")

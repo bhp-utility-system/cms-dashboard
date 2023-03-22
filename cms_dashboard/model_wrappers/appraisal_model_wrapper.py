@@ -1,19 +1,18 @@
 from django.apps import apps as django_apps
 from django.conf import settings
-
 from edc_model_wrapper import ModelWrapper
 
 from .employee_model_wrapper_mixin import EmployeeModelWrapperMixin
-from .kpa_model_wrapper_mixin import KpaModelWrapperMixin
 from .kpa_model_wrapper import KpaModelWrapper
+from .kpa_model_wrapper_mixin import KpaModelWrapperMixin
+from .performance_imp_model_wrapper_mixin import \
+    PerformanceImpModelWrapperMixin
 from .professional_skills_model_wrapper_mixin import (
     StrategicOrientationModelWrapperMixin, ResultsFocusModelWrapperMixin,
     LeadershipAndMotivationModelWrapperMixin,
     InnovationAndCreativityModelWrapperMixin, PlanningSkillsModelWrapperMixin,
     InterpersonalSkillsModelWrapperMixin, CommunicationSkillsModelWrapperMixin,
     KnowledgeAndProductivityModelWrapperMixin, QualityOfWorkModelWrapperMixin)
-from .performance_imp_model_wrapper_mixin import \
-    PerformanceImpModelWrapperMixin
 
 
 class AppraisalModelWrapper(EmployeeModelWrapperMixin,

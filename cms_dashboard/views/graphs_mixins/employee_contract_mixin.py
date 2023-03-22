@@ -1,8 +1,8 @@
 from dateutil.relativedelta import relativedelta
 from django.apps import apps as django_apps
 from django.db.models import Count
+from edc_base import get_utcnow
 from edc_base.view_mixins import EdcBaseViewMixin
-from edc_utils import get_utcnow
 from ...model_wrappers import ContractModelWrapper
 
 from bhp_personnel.models import Employee

@@ -193,3 +193,12 @@ def professional_skills_btn(skill_list_model):
 @register.filter(name='has_group')
 def has_group(user, group_name):
     return user.groups.filter(name=group_name).exists()
+
+
+@register.inclusion_tag('cms_dashboard/buttons/renewal_intent_button.html')
+def renew_intent_button(model_wrapper):
+    title = ['Submit Renewal Intent']
+    return dict(
+        identifier=model_wrapper.object.contract.identifier,
+        add_offstudy_href=model_wrapper.href,
+        title=' '.join(title))
