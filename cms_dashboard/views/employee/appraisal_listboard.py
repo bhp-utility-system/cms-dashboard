@@ -71,7 +71,6 @@ class AppraisalListBoardView(
             appraisal_add_url=wrapped.href,
             performance_imp_obj=self.performance_imp_obj,
             renewal_intent_wrapped_obj=self.renewal_intent_wrapped_obj,
-            renewal_intent_obj=self.renewal_intent_obj
         )
         return context
 
@@ -141,3 +140,14 @@ class AppraisalListBoardView(
                 f"Employee with identifier {identifier} does not exist")
         else:
             return employee
+
+    @property
+    def renewal_intent_cls(self):
+        return django_apps.get_model('bhp_personnel.renewalintent')
+
+    @property
+    def renewal_intent_wrapped_obj(self):
+        model_obj = self.renewal_intent_cls(
+            contract=self.contract_obj,
+        )
+        return RenewalIntentModelWrapper(model_obj=model_obj)

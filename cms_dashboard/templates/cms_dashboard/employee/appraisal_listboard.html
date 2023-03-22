@@ -27,7 +27,7 @@
     {% if contract_due and not renewal_intent %}
         <div class="alert alert-danger alert-sm" role="alert">
             This contract is expiring in {{ contract_obj.end_date }}
-            {% if employee_obj.email == request.user.email or employee_obj.supervisor.email == request.user.email %}
+            {% if employee_obj.email == request.user.email %}
                 Do you intend on renewing your contract?
                 {% renew_intent_button renewal_intent_wrapped_obj %}
             {% endif %}
