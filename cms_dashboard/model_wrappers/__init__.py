@@ -2,8 +2,11 @@ from .appraisal_model_wrapper import AppraisalModelWrapper
 from .consultant_model_wrapper import ConsultantModelWrapper
 from .contract_model_wrapper import ContractModelWrapper
 from .contract_model_wrapper_mixin import ContractModelWrapperMixin
+from .contracting_model_wrapper import ContractingModelWrapper
+from .contracting_model_wrapper_mixin import ContractingModelWrapperMixin
 from .department_model_wrapper_mixin import DepartmentModelWrapperMixin
 from .employee_model_wrapper import EmployeeModelWrapper
+from .job_description_model_wrapper import JobDescriptionModelWrapper
 from .performance_imp_model_wrapper import PerformanceImpModelWrapper
 from .pi_model_wrapper import PiModelWrapper
-from .job_description_model_wrapper import JobDescriptionModelWrapper
+from .renewal_intent_model_wrapper import RenewalIntentModelWrapper

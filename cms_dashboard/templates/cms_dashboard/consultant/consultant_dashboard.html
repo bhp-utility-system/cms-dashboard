@@ -1,4 +1,5 @@
 {% extends 'edc_base/base.html' %}
+{% load cms_dashboard_extras %}
 
 
 {% block extra-styles %}
@@ -19,7 +20,7 @@
 <div class="container">
 	<div class="well">
 		<b>{{consultant.first_name}} {{consultant.middle_name}} {{consultant.last_name}} |
-		Total contracts: <span class="float-right badge badge-light round">{{consultant_contracts}}</span></b>
+		Total contracts: <span class="float-right badge badge-light round">{{contracts|length}}</span></b>
 	</div>
 
   <div class="row">
@@ -28,12 +29,6 @@
 	    <div class="panel panel-info">
 	      <div class="panel-heading">
 	      	Contracts
-	      
-	      	<span class="pull-right">
-                <a id="btn-contract" class="btn btn-default btn-sm" role="button"
-			     title="add_contract" href="{{contract.href }}">
-			     <i class="far fa-user-circle fa-sm"></i> Add Contract </a>            
-            </span>
 	      </div>
 	      <div class="panel-body">
 	      	<table class="table table-striped">
@@ -48,6 +43,26 @@
 		      </tr>
 		    </thead>
 		    <tbody>
+		     {% if not active_contract and request.user|has_group:"HR" %}
+		    	<td></td>
+		    	<td style="white-space: nowrap;">
+				    <div class="btn-group">
+						{% job_descrition_button contract %}
+						{% if contract.job_description_model_obj %}         
+							<a 	id="btn-contract" class="btn btn-default btn-sm" role="button"
+					     		title="add_contract" href="{{contract.href }}">
+					     		<i class="far fa-user-circle fa-sm"></i> Add Contract
+					     	</a>
+					    {% endif %}
+					</div>
+
+				    </td>
+			        <td>--</td>
+			        <td>--</td>
+			        <td>--</td>
+			        <td>--</td>
+			    </td>
+		    {% endif %}
 		    {%for contract in contracts %}
 		      <tr>
 		      	<td>{{ forloop.counter }}</td>

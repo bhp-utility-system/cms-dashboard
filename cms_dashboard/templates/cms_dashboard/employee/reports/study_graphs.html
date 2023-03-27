@@ -1,0 +1,44 @@
+
+  
+  <div class="row">
+  <div class="col-md-12">
+      <h3 style="text-align:center">Employees Per Study</h3>
+        <table class="table table-bordered table-sm ">
+            <thead class="thead-dark">
+            <tr>
+                <th>Study</th>
+                <th></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            	{% for study in employees_per_study %}
+                <tr class="clickable" data-toggle="collapse"
+                  data-target="#group-of-rows-1-{{ study.0 }}" aria-expanded="false"
+                    aria-controls="group-of-rows-1">
+                  <td><i class="fa fa-folder"></i> {{study.0}}</td>
+                <td> Total Employees: {{study.1|length}}</td>
+                </tr>
+                <tbody id="group-of-rows-1-{{ study.0 }}" class="collapse">
+
+                  {% for data in study.1 %}
+                    <tr class="table-warning">
+                      <td>Name : {{ data.first_name }}</td>
+                      <td>LastName: {{ data.last_name }}</td>
+                      <td>Gender: {{ data.get_gender_display }}</td>
+                    </tr>
+                  {% endfor %}
+
+                </tbody>
+
+              {% endfor %}
+            
+            </tbody>     
+         
+        </table>
+    </div>
+
+</div>
+
+
+

@@ -21,3 +21,4 @@ class JobDescriptionModelWrapper(ModelWrapper):
     @property
     def department(self):
         return self.object.department
+

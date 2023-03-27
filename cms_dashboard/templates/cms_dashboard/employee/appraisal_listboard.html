@@ -6,69 +6,101 @@
 {% load static %}
 
 {% block extra-css %}
-{{ block.super }}
-	<link type="text/css" rel="stylesheet" href="{% static 'cms_dashboard/css/report.css' %}">
-	<link href="{% static 'cms_dashboard/css/bootstrap-table.min.css' %}"rel=stylesheet>
-    <link type="text/css" rel="stylesheet" href="{% static 'cms_dashboard/css/popup.css' %}">
+    {{ block.super }}
+    <link type="text/css" rel="stylesheet"
+          href="{% static 'cms_dashboard/css/report.css' %}">
+    <link href="{% static 'cms_dashboard/css/bootstrap-table.min.css' %}" rel=stylesheet>
+    <link type="text/css" rel="stylesheet"
+          href="{% static 'cms_dashboard/css/popup.css' %}">
 
 {% endblock extra-css %}
 
 {% block extra-scripts %}
-{{ block.super }}
-	<script src="{% static 'cms_dashboard/js/tableExport.min.js' %}"></script>
-	<script src="{% static 'cms_dashboard/js/bootstrap-table.min.js' %}"></script>
-	<script src="{% static 'cms_dashboard/js/bootstrap-table-export.min.js' %}"></script>
-	<script src="{% static 'cms_dashboard/js/bootstrap-table-filter-control.min.js' %}"></script>
+    {{ block.super }}
+    <script src="{% static 'cms_dashboard/js/tableExport.min.js' %}"></script>
+    <script src="{% static 'cms_dashboard/js/bootstrap-table.min.js' %}"></script>
+    <script src="{% static 'cms_dashboard/js/bootstrap-table-export.min.js' %}"></script>
+    <script src="{% static 'cms_dashboard/js/bootstrap-table-filter-control.min.js' %}"></script>
 {% endblock %}
 
 {% block main %}
+    {% if contract_due and not renewal_intent %}
+        <div class="alert alert-danger alert-sm" role="alert">
+            This contract is expiring in {{ contract_obj.end_date }}
+            {% if employee_obj.email == request.user.email %}
+                Do you intend on renewing your contract?
+                {% renew_intent_button renewal_intent_wrapped_obj %}
+            {% endif %}
+        </div>
+    {% endif %}
 
-<div class="dropdown">
-  <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-key" ></i>
-    PERFORMANCE SCORE KEY <i class="fa fa-caret-down"></i>
-  </button>
-  <div class="dropdown-menu" aria-labelledby="dropdownMenu2" style=" padding-bottom:0px;">
+    <div class="dropdown">
+        <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenu2"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
+                class="fas fa-key"></i>
+            PERFORMANCE SCORE KEY <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenu2"
+             style=" padding-bottom:0px;">
 
-	  <ul class="list-group">
-		  <li class="list-group-item disabled">Exceptional Performance <span class="badge">5</span></li>
-		  <li class="list-group-item disabled">Exceeds Expectations <span class="badge">4</span></li>
-		  <li class="list-group-item disabled">Competent Meets Standards <span class="badge">3</span></li>
-		  <li class="list-group-item disabled">Weak and Inconsistent Performance &nbsp; <span class="badge">2</span></li>
-		  <li class="list-group-item disabled">Unacceptable Performance <span class="badge">1</span></li>
-		  <li class="list-group-item disabled">Not Rated <span class="badge">NR</span></li>
-		</ul>
+            <ul class="list-group">
+                <li class="list-group-item disabled">Exceptional Performance <span
+                        class="badge">5</span></li>
+                <li class="list-group-item disabled">Exceeds Expectations <span
+                        class="badge">4</span></li>
+                <li class="list-group-item disabled">Competent Meets Standards <span
+                        class="badge">3</span></li>
+                <li class="list-group-item disabled">Weak and Inconsistent Performance
+                    &nbsp; <span class="badge">2</span></li>
+                <li class="list-group-item disabled">Unacceptable Performance <span
+                        class="badge">1</span></li>
+                <li class="list-group-item disabled">Not Rated <span
+                        class="badge">NR</span></li>
+            </ul>
 
-  </div>
-    
-    <div class="btn-group">
-  <button type="button" class="btn btn-info dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-key"></i> SCALES KEY <i class="fa fa-caret-down"></i></button>
-    <span class="sr-only">Toggle Dropdown</span>
-  </button>
-  <div class="dropdown-menu">
-    
-		  <li> <a class="dropdown-item" id="myBtn">Performance Rating Scale</a></li>
-		  <li> <a class="dropdown-item" id="Btn">Performance Scoring & Classification Scale</a> </li>
-		  <li> <a class="dropdown-item" id="Btn3">Competent Meets Standards </a></li>
-  </div>
-</div>
-  </div>
+        </div>
 
-<div id="myModal" class="modal">
+        <div class="btn-group">
+            <button type="button"
+                    class="btn btn-info dropdown-toggle dropdown-toggle-split"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
+                    class="fas fa-key"></i> SCALES KEY <i class="fa fa-caret-down"></i>
+            </button>
+            <span class="sr-only">Toggle Dropdown</span>
+            </button>
+            <div class="dropdown-menu">
 
-  <!-- Modal content -->
-  <div class="modal-content">
-    <span class="close" onclick="document.getElementById('myModal').style.display='none'"><i class="fas fa-window-close" style="--fa-primary-color: tomato"></i></span>
-    <embed src="{% static 'cms_dashboard/doc/Performance Rating Scale.pdf' %}" type="application/pdf" width="100%" height="95%">
-</object>
-  </div>
+                <li><a class="dropdown-item" id="myBtn">Performance Rating Scale</a></li>
+                <li><a class="dropdown-item" id="Btn">Performance Scoring & Classification
+                    Scale</a></li>
+                <li><a class="dropdown-item" id="Btn3">Competent Meets Standards </a></li>
+            </div>
+        </div>
+    </div>
 
-</div>
+    <div id="myModal" class="modal">
 
-<div id="myModal2" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close"
+                  onclick="document.getElementById('myModal').style.display='none'"><i
+                    class="fas fa-window-close"
+                    style="--fa-primary-color: tomato"></i></span>
+            <embed src="{% static 'cms_dashboard/doc/Performance Rating Scale.pdf' %}"
+                   type="application/pdf" width="100%" height="95%">
+            </object>
+        </div>
 
-  <!-- Modal content -->
-  <div class="modal-content">
-    <span class="close" onclick="document.getElementById('myModal2').style.display='none'"><i class="fas fa-window-close" style="--fa-primary-color: tomato"></i></span>
+    </div>
+
+    <div id="myModal2" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close"
+                  onclick="document.getElementById('myModal2').style.display='none'"><i
+                    class="fas fa-window-close"
+                    style="--fa-primary-color: tomato"></i></span>
     <embed src="{% static 'cms_dashboard/doc/Performance Scoring.pdf' %}" type="application/pdf" width="100%" height="95%">
 </object>
   </div>
@@ -121,6 +153,10 @@ btn3.onclick = function() {
 
 </script>
 <style>
+
+  div.hidden{
+    display: none;
+  }
 div.scrollmenu {
   overflow-x: scroll;
   white-space: nowrap;
@@ -138,10 +174,10 @@ div.scrollmenu a {
  <!-- start listboard main block-->
  <div class="panel-group">
   <div class="panel panel-{{ listboard_panel_style }}">
-  <div class="panel-heading">
+  <div class="panel-heading" style="height: 55px">
 
     <!-- begin search form -->
-   <!--  <span class="pull-right">
+   <span class="pull-right">
       {% block listboard_search_form %}
         {% include 'timesheet_dashboard/search_form.html' %}
       {% endblock listboard_search_form %}
@@ -150,11 +186,18 @@ div.scrollmenu a {
 
     {% block listboard_panel %}
     	<!-- start listboard main block-->
-		<a id="btn-dashboard" class="btn btn-sm btn-default" role="button"
+		<a id="btn-dashboard" class="hidden btn btn-sm btn-default" role="button"
      		title="Add Appraisal" href="{{ appraisal_add_url }}">
      		<i class="fa fa-plus fa-sm"></i> Add Appraisal
      	</a>&nbsp&nbsp
-     	{% add_performance_imp_button performance_imp_obj %}
+
+{% if result.overall_score and result.overall_score < 3  %}
+
+  {% add_performance_imp_button performance_imp_obj %}
+
+{% endif %} 
+
+
     {% endblock listboard_panel %}
 
    </div> <!--end panel heading -->
@@ -176,64 +219,71 @@ div.scrollmenu a {
 
 {% block listboard_table_body %}
 {% for result in results %}
-
 <tr>
-
 	<td>
 
   <div class="btn-group">
-    {% edit_appraisal_button result %}
-    <div class="btn-group">
-      <button class="btn btn-success btn-sm dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Section 1: KPA's <span class="caret"></span>
-      </button>
-      <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
-	        {% for kpa in result.kpa_list %}
-              <li style="color:white;"><a class="btn btn-info btn-sm " role="button"
-			href="{{ kpa.get_absolute_url }}">
-				 {{ kpa.kpa_nd_objective }}
-              </a></li>
-	        {% endfor %}
-      </div>
-    </div>
-      <div class="btn-group">
-        <button class="btn btn-warning btn-sm dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Section 2: Professional Skills <span class="caret"></span>
-        </button>
-      <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
-
-		<li>
-			{% strategic_orientation_button result %}
-		</li>
-		<li>
-			{% results_focus_button result %}
-		</li>
-		<li>
-			{% leadership_and_motivation_button result %}
-		</li>
-		<li>
-			{% innovation_and_creativity_button result %}
-		</li>
-		<li>
-			{% planning_skills_button result %}
-		</li>
-		<li>
-			{% interpersonal_skills_button result %}
-		</li>
-		<li>
-			{% communication_skills_button result %}
-		</li>
-		<li>
-			{% knowledge_and_productivity_button result %}
-		</li>
-		<li>
-			{% quality_of_work_button result %}
-		</li>        
-      </ul>
-  </div>
-  </div>
-</div>
-
+	  {% edit_appraisal_button result %}
+	    <div class="btn-group">
+	      <button class="btn btn-success btn-sm dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+	          Section 1: KPA's <span class="caret"></span>
+	      </button>
+	      <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
+		        {% for kpa in result.kpa_list %}
+	              	<li style="color:white;">
+	              		{% kpa_button kpa %}
+					</li>
+		        {% endfor %}
+	      </div>
+	    </div>
+	      <div class="btn-group">
+	        <button class="btn btn-warning btn-sm dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+	            Section 2: Professional Skills <span class="caret"></span>
+	        </button>
+	      <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
+			{% for skill in result.object.contract.contracting.skills.all %}
+				{% if skill.short_name == 'strategic_orientation' %}
+					<li>
+						{% strategic_orientation_button result %}
+					</li>
+				{% elif skill.short_name == 'results_focus' %}
+					<li>
+						{% results_focus_button result %}
+					</li>
+				{% elif skill.short_name == 'leadership_and_motivation' %}
+					<li>
+						{% leadership_and_motivation_button result %}
+					</li>
+				{% elif skill.short_name == 'innovation_and_creativity' %}
+					<li>
+						{% innovation_and_creativity_button result %}
+					</li>
+				{% elif skill.short_name == 'planning_skills' %}
+					<li>
+						{% planning_skills_button result %}
+					</li>
+				{% elif skill.short_name == 'interpersonal_skills' %}
+					<li>
+						{% interpersonal_skills_button result %}
+					</li>
+				{% elif skill.short_name == 'communication_skills' %}
+					<li>
+						{% communication_skills_button result %}
+					</li>
+				{% elif skill.short_name == 'knowledge_and_productivity' %}
+					<li>
+						{% knowledge_and_productivity_button result %}
+					</li>
+				{% elif skill.short_name == 'quality_of_work' %}
+					<li>
+						{% quality_of_work_button result %}
+					</li>
+				{% endif %}
+			{% endfor %}
+	      </ul>
+	  </div>
+	  </div>
+	</div>
 	</td>
 
 	{% block listboard_table_button_column %}
@@ -244,7 +294,7 @@ div.scrollmenu a {
 	<td nowrap>{{ result.object.contract }}</td>
 	<td nowrap>{{ result.object.get_review_display }}</td>
 	<td nowrap>
-		<span class="badge badge-pill badge-info">{{ result.overall_score }}</span>
+		<span class="badge badge-pill badge-info">{{ result.overall_score|floatformat }}</span>
 	</td>
 	{% endblock listboard_table_columns %}
 </tr>

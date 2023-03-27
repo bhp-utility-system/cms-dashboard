@@ -1,5 +1,5 @@
 import re
-# from django.apps import apps as django_apps
+from django.apps import apps as django_apps
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.utils.decorators import method_decorator
@@ -41,9 +41,19 @@ class ConsultantListBoardView(NavbarViewMixin, EdcBaseViewMixin,
 
     def get_queryset_filter_options(self, request, *args, **kwargs):
         options = super().get_queryset_filter_options(request, *args, **kwargs)
+        usr_groups = [g.name for g in self.request.user.groups.all()]
+
         if kwargs.get('identifier'):
             options.update(
                 {'identifier': kwargs.get('identifier')})
+        if 'Supervisor' in usr_groups or request.GET.get('p_role') == 'Supervisor':
+            employee_cls = django_apps.get_model('bhp_personnel.employee')
+            try:
+                employee_obj = employee_cls.objects.get(email=self.request.user.email)
+            except employee_cls.DoesNotExist:
+                options.update({'user_created': None})
+            else:
+                options.update({'supervisor': employee_obj})
         return options
 
     def extra_search_options(self, search_term):

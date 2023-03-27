@@ -4,10 +4,12 @@
 {% load cms_dashboard_extras %}
              
 {% block listboard_panel %}
-    <a id="pi_add" title="add consultant" class="btn btn-sm btn-default" role="button" 
-        href="{{ pi_add_url }}?next={{ pi_listboard_url }}">
-            <i class="fa fa-plus fa-sm"></i> Add PI
-    </a>
+	{% if request.user|has_group:"HR" %}
+	    <a id="pi_add" title="add consultant" class="btn btn-sm btn-default" role="button" 
+	        href="{{ pi_add_url }}?next={{ pi_listboard_url }}">
+	            <i class="fa fa-plus fa-sm"></i> Add PI
+	    </a>
+	{% endif %}
 {% endblock listboard_panel %}
 
 {% block listboard_table_header %}

@@ -1,5 +1,6 @@
 {% extends 'cms_dashboard/base.html' %}
 {% load cms_dashboard_extras %}
+{% load static %}
 
 
 {% block extra-styles %}
@@ -21,7 +22,7 @@
 	     <div class="box">
 	     	{% if not request.user|has_group:"HR" %}
 	     		<div class="icon">
-	       			<img src="" width='100' height='100'/>
+	       			<img src="{% static 'cms_dashboard/images/contract.png' %}" width='100' height='100'/>
 	       		</div>
 	       	{% endif %}
 	     	<h1 style="font-weight:300; font-size:35px; line-height:1.5" class="title">Contract Management Dashboard</h1>
@@ -38,9 +39,11 @@
                 <div class="card border-info shadow text-info p-3 my-card" ><span  aria-hidden="true"></span></div>
                 <div class="text-info text-center mt-3"><h4>Total staff/PI/Consultants</h4></div>
                 <div class="text-info text-center mt-2"><h1>{{total	}}</h1></div>
-                <a href="{% url contract_listboard_url %}" class="btn btn-info btn-md" style="background-color:transparent; color:#4682B4">
-	       			 All Contracts <i class="fa fa-external-link-alt"></i>
-	       		</a>
+                <div style='justify-content:center;align-items:center;display:flex'>
+	                <a href="{% url contract_listboard_url %}" class="btn btn-info btn-md" style="background-color:transparent;color:#4682B4">
+		       			 All Contracts <i class="fa fa-external-link-alt"></i>
+		       		</a>
+                </div>
             </div>
         </div>
         <div class="col-md-3">
@@ -48,9 +51,11 @@
                 <div class="card border-success shadow text-success p-3 my-card"><span  aria-hidden="true"></span></div>
                 <div class="text-success text-center mt-3"><h4>Total employees</h4></div>
                 <div class="text-success text-center mt-2"><h1>{{employees_total}}</h1></div>
-                <a href="{% url employee_listboard_url %}" class="btn btn-info btn-md" style="background-color:transparent; color:#4682B4">
-	       			 Employees <i class="fa fa-external-link-alt"></i>
-	       		</a>
+                <div style='justify-content:center;align-items:center;display:flex'>
+	                <a href="{% url employee_listboard_url %}" class="btn btn-info btn-md" style="background-color:transparent; color:#4682B4">
+		       			 Employees <i class="fa fa-external-link-alt"></i>
+		       		</a>
+		       	</div>
             </div>
         </div>
         <div class="col-md-3">
@@ -58,9 +63,11 @@
                 <div class="card border-danger shadow text-danger p-3 my-card" ><span aria-hidden="true"></span></div>
                 <div class="text-danger text-center mt-3"><h4>Total PIs</h4></div>
                 <div class="text-danger text-center mt-2"><h1>{{pi_total}}</h1></div>
-                <a href="{% url pi_listboard_url %}" class="btn btn-info btn-md" style="background-color:transparent; color:#4682B4;width:100px">
-	       			 PIs <i class="fa fa-external-link-alt"></i>
-	       		</a>
+                <div style='justify-content:center;align-items:center;display:flex'>
+	                <a href="{% url pi_listboard_url %}" class="btn btn-info btn-md" style="background-color:transparent;color:#4682B4;width:100px">
+		       			 PIs <i class="fa fa-external-link-alt"></i>
+		       		</a>
+		       	</div>
             </div>
         </div>
         <div class="col-md-3">
@@ -68,9 +75,11 @@
                 <div class="card border-warning shadow text-warning p-3 my-card" ><span  aria-hidden="true"></span></div>
                 <div class="text-warning text-center mt-3"><h4>Total Consultants</h4></div>
                 <div class="text-warning text-center mt-2"><h1>{{consultant_total}}</h1></div>
-               	<a href="{% url consultant_listboard_url %}" class="btn btn-info btn-md" style="background-color:transparent; color:#4682B4">
-	       			 Consultants <i class="fa fa-external-link-alt"></i>
-	       		</a>
+                <div style='justify-content:center;align-items:center;display:flex'>
+	               	<a href="{% url consultant_listboard_url %}" class="btn btn-info btn-md" style="background-color:transparent; color:#4682B4">
+		       			 Consultants <i class="fa fa-external-link-alt"></i>
+		       		</a>
+		       	</div>
             </div>
         </div>
      </div>
@@ -83,9 +92,9 @@
 		<header class="card-header"><h6 class="title">Overall Contract stats </h6></header>
 		<div class="filter-content">
 			<div class="list-group list-group-flush">
-			  <a href="#" class="list-group-item">Active Contracts <span class="float-right badge badge-light round">{{active_contracts}}</span></a>
-			  <a href="#" class="list-group-item">Completed contracts  <span class="float-right badge badge-light round">{{completed_contracts}}</span></a>
-			  <a href="#" class="list-group-item">Due Contracts <span class="float-right badge badge-light round">0</span></a>
+			  <a href="{% url emp_contract_listboard_url %}?f=active" class="list-group-item">Active Contracts <span class="float-right badge badge-light round">{{active_contracts}}</span></a>
+			  <a href="{% url emp_contract_listboard_url %}?f=completed" class="list-group-item">Completed contracts  <span class="float-right badge badge-light round">{{completed_contracts}}</span></a>
+			  <a href="{% url emp_contract_listboard_url %}?f=due_date" class="list-group-item">Due Contracts <span class="float-right badge badge-light round">{{due_contracts}}</span></a>
 			</div>  <!-- list-group .// -->
 		</div>
 	</article> <!-- card-group-item.// -->
@@ -162,11 +171,11 @@
     				<span class="caret"></span>
     			</button>
     		<ul class="dropdown-menu dropdown-menu-right">
-      			<li><a href="">Employees <span class="badge pull-right">{{employee_supervisees}}</span></a></li>
+      			<li><a href="{% url employee_listboard_url %}?p_role=Supervisor">Employees <span class="badge pull-right">{{employee_supervisees}}</span></a></li>
       			<li class="divider"></li>
       			<li><a href="{% url consultant_listboard_url %}?p_role=Supervisor">Consultants <span class="badge pull-right">{{consultant_supervisees}}</span></a></li>
       			<li class="divider"></li>
-      			<li><a href="#">PIs <span class="badge pull-right">{{pi_supervisees}}</span></a></li>
+      			<li><a href="{% url pi_listboard_url %}?p_role=Supervisor">PIs <span class="badge pull-right">{{pi_supervisees}}</span></a></li>
     		</ul>
   			</div>
    		</div>

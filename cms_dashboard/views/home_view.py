@@ -1,6 +1,8 @@
 from django.apps import apps as django_apps
 from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user
+from edc_base.utils import get_utcnow
+from dateutil.relativedelta import relativedelta
 from django.views.generic import TemplateView
 from edc_base.view_mixins import EdcBaseViewMixin
 from edc_navbar import NavbarViewMixin
@@ -9,7 +11,6 @@ from bhp_personnel.models import Contract, Consultant, Employee, Pi
 
 
 class HomeView(EdcBaseViewMixin, NavbarViewMixin, TemplateView):
-
     template_name = 'cms_dashboard/home.html'
     navbar_name = 'cms_main_dashboard'
     navbar_selected_item = 'home'
@@ -38,7 +39,7 @@ class HomeView(EdcBaseViewMixin, NavbarViewMixin, TemplateView):
             identifier__startswith="C", status="Active")
 
         active_contracts = active_employees.count() + \
-            active_pis.count() + active_consultants.count()
+                           active_pis.count() + active_consultants.count()
 
         employee_completed = Contract.objects.filter(
             identifier__startswith="E", contract_ended="True")
@@ -48,7 +49,7 @@ class HomeView(EdcBaseViewMixin, NavbarViewMixin, TemplateView):
             identifier__startswith="C", contract_ended="True")
 
         completed_contracts = employee_completed.count() + \
-            pi_completed.count() + consultant_completed.count()
+                              pi_completed.count() + consultant_completed.count()
 
         current_user = get_user(self.request)
         employee_supervisees = Employee.objects.filter(
@@ -57,6 +58,12 @@ class HomeView(EdcBaseViewMixin, NavbarViewMixin, TemplateView):
             supervisor__email=current_user.email)
         pi_supervisees = Pi.objects.filter(
             supervisor__email=current_user.email)
+
+        three_months_ahead = get_utcnow().date() + relativedelta(months=3)
+
+        due_contracts = Contract.objects.filter(
+            end_date__range=[get_utcnow().date(), three_months_ahead],
+        )
 
         context.update(
             total=total,
@@ -74,6 +81,7 @@ class HomeView(EdcBaseViewMixin, NavbarViewMixin, TemplateView):
             active_pis=active_pis.count(),
             active_consultants=active_consultants.count(),
             active_contracts=active_contracts,
+            due_contracts=due_contracts.count(),
 
             # Complete Contracts
             employee_completed=employee_completed.count(),
@@ -88,7 +96,7 @@ class HomeView(EdcBaseViewMixin, NavbarViewMixin, TemplateView):
 
             employee_identifier=self.employee_logged_in.identifier,
             is_supervisor=self.is_supervisor
-            )
+        )
         return context
 
     @property

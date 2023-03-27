@@ -1,0 +1,50 @@
+<div class="row">
+<div class="col-md-10">
+    <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+</div>
+</div>
+
+<script>
+ 
+        Highcharts.chart('container',{
+            chart: {
+                type: 'pie',
+                marginTop: 100
+            },
+            title: {
+              text: 'Employees Categorised By Nationality'
+          },
+            series: [{
+                name: 'Nationality',
+                colorByPoint: true,
+                data: [{
+                    name: 'Citizens',
+                    y: {{nationality_stats.0}},
+                    drilldown: 'citizens'
+                }, {
+                    name: 'Non-Citizens',
+                    y: {{nationality_stats.1}},
+                    drilldown: 'expatriates'
+                },]
+            }],
+            drilldown: {
+                drillUpButton: {
+                    position: {
+                        verticalAlign: 'top',
+                        align: 'center',
+                        y: -50,
+                        x: -20
+                    }
+                },
+                series: [{
+                    id: 'citizens',
+                    data:  {{dept_citizen_stats | safe}}
+                }, {
+                    id: 'expatriates',
+                    data: {{dept_noncitizen_stats | safe}}
+                }]
+            }
+        });
+    
+    
+</script>

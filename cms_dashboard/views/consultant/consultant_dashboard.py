@@ -48,8 +48,7 @@ class ConsultantDashboardView(NavbarViewMixin, EdcBaseViewMixin, TemplateView):
             identifier=identifier,
             consultant=self.consultant(identifier=identifier),
             contracts=self.contracts(identifier=identifier),
-            contract=self.contract(identifier=identifier),
-            consultant_contracts=Contract.objects.filter(identifier=identifier).count())
+            contract=self.contract(identifier=identifier))
         return context
 
     @method_decorator(login_required)

@@ -39,9 +39,9 @@ class JobDescriptionModelWrapperMixin:
             contract=self.contract)
         if hasattr(self, 'employee_model_obj'):
             options.update(
-                job_title=self.employee_model_obj.job_title,
-                supervisor=self.employee_model_obj.supervisor,
-                department=self.employee_model_obj.department)
+                job_title=self.jd_initials.get('job_title'),
+                supervisor=self.jd_initials.get('supervisor'),
+                department=self.jd_initials.get('department'))
         return options
 
     @property

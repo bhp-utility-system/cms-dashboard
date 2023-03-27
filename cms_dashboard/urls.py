@@ -10,7 +10,7 @@ from .patterns import contract, identifier
 from .views import (
     ContractListBoardView, ConsultantListBoardView, EmployeeListBoardView,
     PiListBoardView, DashboardView, PiDashboardView, ConsultantDashboardView,
-    HomeView, AppraisalListBoardView)
+    HomeView, AppraisalListBoardView, ReportsView)
 from .views.contract import (
     ConsultantContractListBoardView, EmployeeContractListboardView,
     PiContractListBoardView)
@@ -99,6 +99,7 @@ urlpatterns = [
 ]
 
 urlpatterns += [path('cms/', HomeView.as_view(), name='cms_url')]
+urlpatterns += [path('reports/', ReportsView.as_view(), name='reports_url')]
 urlpatterns += appraisal_listboard_url_config.listboard_urls
 urlpatterns += contract_listboard_url_config.listboard_urls
 urlpatterns += consultant_dashboard_url_config.dashboard_urls

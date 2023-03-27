@@ -1,14 +1,12 @@
- <a id="kpa_add_{{ emp_identifier }}"
+ <a id="kpa_add_{{ emp_identifier }}" style="border-top: 1px solid #fff"
  	title="{{ title }}"
-
- 	{% if kpa_object %}
-            class="btn btn-success btn-sm" data-toggle="tooltip"  data-placement="right"
+ 	{% if kpa_object.kpa_score %}
+            class="btn-success" data-toggle="tooltip"  data-placement="right"
             href="{{ add_kpa_href }}">
+            Section 1: KPA's {{kpa_object.kpa_nd_objective}}
     {% else %}
-            class="btn btn-warning btn-sm" data-toggle="tooltip"  data-placement="right"
+            class="btn-info" data-toggle="tooltip"  data-placement="right"
         href="{{ add_kpa_href }}">
+        	Section 1: KPA's {{kpa_object.kpa_nd_objective}}
     {% endif %}
-
-     	Section 1: KPA's
-
  </a>

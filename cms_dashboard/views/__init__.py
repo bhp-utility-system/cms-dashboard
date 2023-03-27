@@ -5,5 +5,6 @@ from .employee import AppraisalListBoardView
 from .employee import DashboardView
 from .employee import EmployeeListBoardView
 from .home_view import HomeView
+from .reports_view import ReportsView
 from .pi import PiDashboardView
 from .pi import PiListBoardView

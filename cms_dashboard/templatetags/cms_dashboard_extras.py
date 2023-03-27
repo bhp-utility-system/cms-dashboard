@@ -25,6 +25,15 @@ def edit_appraisal_button(model_wrapper):
         title=' '.join(title))
 
 
+@register.inclusion_tag('cms_dashboard/buttons/edit_renewal_intent_button.html')
+def edit_renewal_intent_button(model_wrapper):
+    title = ['Edit renewal intent form.']
+    return dict(
+        # identifier=model_wrapper.object.identifier,
+        href=model_wrapper.href,
+        title=' '.join(title))
+
+
 @register.inclusion_tag('cms_dashboard/buttons/edit_details_button.html')
 def edit_details_button(model_wrapper):
     title = ['Edit details form.']
@@ -45,18 +54,27 @@ def add_performance_imp_button(model_wrapper):
 @register.inclusion_tag('cms_dashboard/buttons/kpa_button.html')
 def kpa_button(model_wrapper):
     return dict(
-        add_kpa_href=model_wrapper.kpa.href,
-        # add_strategic_orientation_href=model_wrapper.strategic_orientation.href,
+        add_kpa_href=model_wrapper.href,
         emp_identifier=model_wrapper.object.emp_identifier,
-        kpa_object=model_wrapper.kpa_model_obj)
+        kpa_object=model_wrapper.object)
 
 
-@register.inclusion_tag('cms_dashboard/buttons/job_description_button.html')
-def job_descrition_button(model_wrapper):
+@register.inclusion_tag('cms_dashboard/buttons/renewal_intent_button.html')
+def renewal_intent_button(model_wrapper):
     return dict(
-        add_jobdescription_href=model_wrapper.job_description.href,
-        emp_identifier=model_wrapper.emp_identifier,
-        job_description_model_obj=model_wrapper.job_description_model_obj)
+        add_renewal_intent_href=model_wrapper.href,
+        emp_identifier=model_wrapper.object.emp_identifier,
+        renewal_intent_object=model_wrapper.object)
+
+
+@register.inclusion_tag('cms_dashboard/buttons/contracting_button.html')
+def contracting_button(model_wrapper):
+    return dict(
+        add_contracting_href=model_wrapper.contracting.href,
+        identifier=model_wrapper.contracting.identifier,
+        contracting_model_obj=model_wrapper.contracting_model_obj
+        # contracting_model_obj=model_wrapper.contract_model_obj
+    )
 
 
 @register.inclusion_tag('cms_dashboard/buttons/strategic_orientation_button.html')
@@ -167,6 +185,20 @@ def quality_of_work_button(model_wrapper):
         quality_model_obj=model_wrapper.quality_model_obj)
 
 
+@register.filter(name='professional_skills_btn')
+def professional_skills_btn(skill_list_model):
+    return f'{skill_list_model.short_name}_button'
+
+
 @register.filter(name='has_group')
 def has_group(user, group_name):
     return user.groups.filter(name=group_name).exists()
+
+
+@register.inclusion_tag('cms_dashboard/buttons/renewal_intent_button.html')
+def renew_intent_button(model_wrapper):
+    title = ['Submit Renewal Intent']
+    return dict(
+        identifier=model_wrapper.object.contract.identifier,
+        add_offstudy_href=model_wrapper.href,
+        title=' '.join(title))

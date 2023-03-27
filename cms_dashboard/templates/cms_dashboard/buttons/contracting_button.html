@@ -1,0 +1,13 @@
+<a id="contracting_add_{{ identifier }}"
+ title="{{ title }}"
+ {% if contracting_model_obj %}
+    class="btn btn-success btn-sm" data-toggle="tooltip"  data-placement="right"
+    href="{{ add_contracting_href }}">
+    <i class="fa fa-edit"></i> 
+{% else %}
+    class="btn btn-warning btn-sm" data-toggle="tooltip"  data-placement="right"
+    href="{{ add_contracting_href }}">
+    <i class="fa fa-plus-circle"></i> 
+{% endif %}
+Contracting
+</a>

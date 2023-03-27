@@ -39,5 +39,13 @@ cms_dashboard.append_item(
         fa_icon='far fa-user-circle',
         url_name=settings.DASHBOARD_URL_NAMES.get('contract_listboard_url')))
 
+# report tab
+cms_dashboard.append_item(
+    NavbarItem(
+        name='reports',
+        label='CMS Reports',
+        fa_icon='fa-file',
+        url_name=settings.DASHBOARD_URL_NAMES.get('reports_url')))
+
 site_navbars.register(cms_main_dashboard)
 site_navbars.register(cms_dashboard)
