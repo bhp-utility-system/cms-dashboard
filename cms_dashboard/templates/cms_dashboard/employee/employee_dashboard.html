@@ -46,7 +46,7 @@
                             <td></td>
                             <td style="white-space: nowrap;">
                                 <div class="btn-group">
-                                    {% if request.user|has_group:"HR" or request.user|has_group:"Supervisor" %}
+                                    {% if request.user|has_group:"HR"%}
                                         <a id="btn-contract"
                                            class="btn btn-default btn-sm"
                                            role="button"
