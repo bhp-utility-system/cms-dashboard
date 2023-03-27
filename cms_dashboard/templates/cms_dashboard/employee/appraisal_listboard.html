@@ -292,7 +292,7 @@ div.scrollmenu a {
 
 	{% block listboard_table_columns %}
 	<td nowrap>{{ result.object.contract }}</td>
-	<td nowrap>{{ result.object.review }}</td>
+	<td nowrap>{{ result.object.get_review_display }}</td>
 	<td nowrap>
 		<span class="badge badge-pill badge-info">{{ result.overall_score|floatformat }}</span>
 	</td>
