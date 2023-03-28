@@ -24,15 +24,23 @@
 {% endblock %}
 
 {% block main %}
-    {% if contract_due and not renewal_intent %}
+    {% if contract_due  %}
         <div class="alert alert-danger alert-sm" role="alert">
             This contract is expiring in {{ contract_obj.end_date }}
             {% if employee_obj.email == request.user.email %}
                 Do you intend on renewing your contract?
                 {% renew_intent_button renewal_intent_wrapped_obj %}
             {% endif %}
-        </div>
     {% endif %}
+
+    {% if request.user.email == employee_obj.supervisor.email %}
+        {% if renewal_intent and renewal_intent.comment|length == 0 %}
+            <button type="button" id="intent-portal-button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#renewalIntentModal">
+                Comment on Renewal Intent
+            </button>
+        {% endif %}
+    {% endif %}
+        </div>
 
     <div class="dropdown">
         <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenu2"
@@ -118,38 +126,71 @@
 
 </div>
 
+    <div id="intent-portal" class="modal" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form id="comment-form" method="post" action="." class="comment-form">
+              {% csrf_token %}
+              <div class="form-group">
+                <label for="comment">Comment:</label>
+                <textarea class="form-control" id="comment" name="comment" required></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary">Submit Comment</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
 <script>
     // Get the modal
-var modal = document.getElementById("myModal");
+    var modal = document.getElementById("myModal");
 
-// Get the button that opens the modal
-var btn = document.getElementById("myBtn");
+    // Get the button that opens the modal
+    var btn = document.getElementById("myBtn");
 
-// When the user clicks the button, open the modal
-btn.onclick = function() {
-  modal.style.display = "block";
-}
+    // When the user clicks the button, open the modal
+    btn.onclick = function() {
+        modal.style.display = "block";
+    }
 
-// Get the modal
-var modal2 = document.getElementById("myModal2");
+    // Get the modal
+    var modal2 = document.getElementById("myModal2");
 
-// Get the button that opens the modal
-var btn2 = document.getElementById("Btn");
+    // Get the button that opens the modal
+    var btn2 = document.getElementById("Btn");
 
-// When the user clicks the button, open the modal
-btn2.onclick = function() {
-  modal2.style.display = "block";
-}
-// Get the modal
-var modal3 = document.getElementById("myModal3");
+    // When the user clicks the button, open the modal
+    btn2.onclick = function() {
+        modal2.style.display = "block";
+    }
+    // Get the modal
+    var modal3 = document.getElementById("myModal3");
 
-// Get the button that opens the modal
-var btn3 = document.getElementById("Btn3");
+    // Get the button that opens the modal
+    var btn3 = document.getElementById("Btn3");
 
-// When the user clicks the button, open the modal
-btn3.onclick = function() {
-  modal3.style.display = "block";
-}
+    // When the user clicks the button, open the modal
+    btn3.onclick = function() {
+        modal3.style.display = "block";
+    }
+
+    var intentPortalButton = document.getElementById("intent-portal-button");
+
+    // Get the portal element
+    var intentPortal = document.getElementById("intent-portal");
+
+    // Add an event listener to the button
+    intentPortalButton.addEventListener("click", function() {
+        // Show the portal
+        $('#intent-portal').modal('show');
+    });
 
 </script>
 <style>
@@ -164,6 +205,10 @@ div.scrollmenu {
 
 div.scrollmenu a {
   display: inline-block;
+}
+
+.modal-backdrop {
+  z-index: -1;
 }
 </style>
 <div class="row">
@@ -283,7 +328,6 @@ div.scrollmenu a {
 	      </ul>
 	  </div>
 	  </div>
-	</div>
 	</td>
 
 	{% block listboard_table_button_column %}

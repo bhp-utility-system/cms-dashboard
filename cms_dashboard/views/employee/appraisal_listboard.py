@@ -104,7 +104,31 @@ class AppraisalListBoardView(
                     intent=intent
                 )
                 messages.success(request, 'Your renewal intent has been successfully submitted.')
+
+            elif self.get_renewal_intent and employee_obj.supervisor.email == self.request.user.email:
+                comment = request.POST.get('comment')
+
+                if comment:
+                    self.update_intent(identifier=self.contract_obj.identifier, comment=comment,
+                                       request=request)
+                    messages.success(request, 'You have commented on renewal intent')
         return HttpResponseRedirect(self.request.path)
+
+    def update_intent(self, identifier=None, comment=None, request=None):
+        renewal_intent_obj = self.latest_renewal_intent_obj(identifier)
+        renewal_intent_obj.comment = comment
+        renewal_intent_obj.save()
+        messages.success(request, 'Comment successfully saved')
+
+    def latest_renewal_intent_obj(self, identifier=None):
+        try:
+            renewal_intent_obj = self.renewal_intent_cls.objects.filter(
+                contract__identifier=identifier,
+            ).earliest('contract__start_date')
+        except self.renewal_intent_cls.DoesNotExist:
+            return None
+        else:
+            return renewal_intent_obj
 
     @property
     def contract_obj(self):
