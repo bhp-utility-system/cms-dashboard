@@ -111,7 +111,6 @@ class AppraisalListBoardView(
                 if comment:
                     self.update_intent(identifier=self.contract_obj.identifier, comment=comment,
                                        request=request)
-                    messages.success(request, 'You have commented on renewal intent')
         return HttpResponseRedirect(self.request.path)
 
     def update_intent(self, identifier=None, comment=None, request=None):

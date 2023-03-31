@@ -24,23 +24,15 @@
 {% endblock %}
 
 {% block main %}
-    {% if contract_due  %}
+    {% if contract_due and not renewal_intent   %}
         <div class="alert alert-danger alert-sm" role="alert">
-            This contract is expiring in {{ contract_obj.end_date }}
-            {% if employee_obj.email == request.user.email %}
-                Do you intend on renewing your contract?
-                {% renew_intent_button renewal_intent_wrapped_obj %}
-            {% endif %}
-    {% endif %}
-
-    {% if request.user.email == employee_obj.supervisor.email %}
-        {% if renewal_intent and renewal_intent.comment|length == 0 %}
-            <button type="button" id="intent-portal-button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#renewalIntentModal">
-                Comment on Renewal Intent
-            </button>
+        This contract is expiring in {{ contract_obj.end_date }}
+        {% if employee_obj.email == request.user.email %}
+            Do you intend on renewing your contract?
+            {% renew_intent_button renewal_intent_wrapped_obj %}
         {% endif %}
-    {% endif %}
         </div>
+    {% endif %}
 
     <div class="dropdown">
         <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenu2"
@@ -84,6 +76,13 @@
                 <li><a class="dropdown-item" id="Btn3">Competent Meets Standards </a></li>
             </div>
         </div>
+        {% if request.user.email == employee_obj.supervisor.email %}
+            {% if renewal_intent and renewal_intent.comment|length == 0 %}
+                <button type="button" id="intent-portal-button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#renewalIntentModal">
+                    Comment on Renewal Intent
+                </button>
+            {% endif %}
+        {% endif %}
     </div>
 
     <div id="myModal" class="modal">

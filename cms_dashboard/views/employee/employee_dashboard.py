@@ -74,7 +74,6 @@ class DashboardView(NavbarViewMixin, EdcBaseViewMixin, TemplateView):
         context.update(
             YES=YES,
             identifier=self.identifier,
-            renewal_intent=self.latest_renewal_intent_obj(identifier=self.identifier),
             employee=self.employee(identifier=self.identifier),
             contracts=self.contracts(identifier=self.identifier),
             contract=self.contract(identifier=self.identifier),
