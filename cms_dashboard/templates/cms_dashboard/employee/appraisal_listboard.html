@@ -34,6 +34,11 @@
         </div>
     {% endif %}
 
+    {% if request.user|has_group:"HR" and renewal_intent  %}
+        This employee has submitted a renewal intent. click here to view intent form
+        <a href="{{ renewal_intent_wrapped_obj.href }}"> link</a>
+    {% endif %}
+
     <div class="dropdown">
         <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenu2"
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i

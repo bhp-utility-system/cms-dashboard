@@ -97,7 +97,7 @@ class AppraisalListBoardView(
             renewal_intent_cls = django_apps.get_model('bhp_personnel.renewalintent')
             employee_obj = self.employee
 
-            if employee_obj.email == self.request.user.email and\
+            if employee_obj.email == self.request.user.email and \
                     self.get_renewal_intent is None:
                 renewal_intent_cls.objects.create(
                     contract=self.contract_obj,
@@ -170,7 +170,11 @@ class AppraisalListBoardView(
 
     @property
     def renewal_intent_wrapped_obj(self):
-        model_obj = self.renewal_intent_cls(
-            contract=self.contract_obj,
-        )
-        return RenewalIntentModelWrapper(model_obj=model_obj)
+        model_obj = self.get_renewal_intent
+        if model_obj:
+            return RenewalIntentModelWrapper(model_obj=model_obj)
+        else:
+            model_obj = self.renewal_intent_cls(
+                contract=self.contract_obj,
+            )
+            return RenewalIntentModelWrapper(model_obj=model_obj)
