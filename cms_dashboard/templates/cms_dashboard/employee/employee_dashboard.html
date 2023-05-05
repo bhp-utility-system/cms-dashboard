@@ -153,16 +153,19 @@
                 </div>
 
                 <div class="panel panel-info">
-                    <div class="panel-heading">Demographics</div>
+                    <div class="panel-heading">
+                        Demographics
+                        {% edit_personal_info_button employee %}
+                    </div>
                     <div class="panel-body">
                         <b>Name:</b> {{ employee.first_name }} {{ employee.middle_name }} {{ employee.last_name }}</br>
-                        <b>Title:</b> {{ employee.title_salutation }}</br>
+                        <b>Title:</b> {{ employee.get_title_salutation_display }}</br>
                         <b>Job Title:</b> {{ employee.job_title }}</br>
                         <b>DOB:</b> {{ employee.date_of_birth }}</br>
-                        <b>Gender:</b> {{ employee.gender }}</br>
+                        <b>Gender:</b> {{ employee.get_gender_display }}</br>
                         <hr>
                         <b>Highest qualification
-                            level:</b> {{ employee.highest_qualification }}</br>
+                            level:</b> {{ employee.get_highest_qualification_display }}</br>
                         <hr>
                         <b>Email:</b> {{ employee.email }}</br>
                         <b>Cell:</b> {{ employee.cell }}</br>
