@@ -26,7 +26,7 @@
 {% block main %}
     {% if contract_due and not renewal_intent   %}
         <div class="alert alert-danger alert-sm" role="alert">
-        This contract is expiring in {{ contract_obj.end_date }}
+        This contract is expiring on {{ contract_obj.end_date }}
         {% if employee_obj.email == request.user.email %}
             Do you intend on renewing your contract?
             {% renew_intent_button renewal_intent_wrapped_obj %}
@@ -34,10 +34,12 @@
         </div>
     {% endif %}
 
-    {% if request.user|has_group:"HR" and renewal_intent  %}
-        This employee has submitted a renewal intent. click here to view intent form
-        <a href="{{ renewal_intent_wrapped_obj.href }}"> link</a>
+    {% if request.user|has_group:"HR" and renewal_intent %}
+        <div class="alert alert-info" role="alert">
+            <p>This employee has submitted a renewal intent. <a href="{{ renewal_intent_wrapped_obj.href }}" class="alert-link">Click here</a> to view the intent form.</p>
+        </div>
     {% endif %}
+
 
     <div class="dropdown">
         <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenu2"
@@ -257,82 +259,24 @@ div.scrollmenu a {
 
 {% block listboard_table_header %}
      <!-- begin results header -->
-    <th>#</th>
-    <th style="width:10px;" data-field='contract' data-sortable='true' data-filter-control="input">Contract</th>
-    <th data-field='overall_perf_score' data-sortable='true' data-filter-control="input">Review</th>
-    <th data-field='final_assess_score' data-sortable='true' data-filter-control="input">Final Assessment Score</th>
+    <th></th>
+    <th data-field='contract' data-sortable='true' data-filter-control="input">Contract</th>
+    <th data-field='assessment_type' data-sortable='true' data-filter-control="input">Assessment Type</th>
+    <th data-field='overall_score' data-sortable='true' data-filter-control="input">Overall Assessment Result</th>
+    <th>Approval status</th>
+    <th>Action</th>
+
     <!-- end results header -->
 {% endblock listboard_table_header %}
 
 </thead><tbody>
 
 {% block listboard_table_body %}
+
 {% for result in results %}
 <tr>
 	<td>
 
-  <div class="btn-group">
-	  {% edit_appraisal_button result %}
-	    <div class="btn-group">
-	      <button class="btn btn-success btn-sm dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-	          Section 1: KPA's <span class="caret"></span>
-	      </button>
-	      <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
-		        {% for kpa in result.kpa_list %}
-	              	<li style="color:white;">
-	              		{% kpa_button kpa %}
-					</li>
-		        {% endfor %}
-	      </div>
-	    </div>
-	      <div class="btn-group">
-	        <button class="btn btn-warning btn-sm dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-	            Section 2: Professional Skills <span class="caret"></span>
-	        </button>
-	      <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
-			{% for skill in result.object.contract.contracting.skills.all %}
-				{% if skill.short_name == 'strategic_orientation' %}
-					<li>
-						{% strategic_orientation_button result %}
-					</li>
-				{% elif skill.short_name == 'results_focus' %}
-					<li>
-						{% results_focus_button result %}
-					</li>
-				{% elif skill.short_name == 'leadership_and_motivation' %}
-					<li>
-						{% leadership_and_motivation_button result %}
-					</li>
-				{% elif skill.short_name == 'innovation_and_creativity' %}
-					<li>
-						{% innovation_and_creativity_button result %}
-					</li>
-				{% elif skill.short_name == 'planning_skills' %}
-					<li>
-						{% planning_skills_button result %}
-					</li>
-				{% elif skill.short_name == 'interpersonal_skills' %}
-					<li>
-						{% interpersonal_skills_button result %}
-					</li>
-				{% elif skill.short_name == 'communication_skills' %}
-					<li>
-						{% communication_skills_button result %}
-					</li>
-				{% elif skill.short_name == 'knowledge_and_productivity' %}
-					<li>
-						{% knowledge_and_productivity_button result %}
-					</li>
-				{% elif skill.short_name == 'quality_of_work' %}
-					<li>
-						{% quality_of_work_button result %}
-					</li>
-				{% endif %}
-			{% endfor %}
-	      </ul>
-	  </div>
-	  </div>
-	</td>
 
 	{% block listboard_table_button_column %}
 
@@ -340,10 +284,16 @@ div.scrollmenu a {
 
 	{% block listboard_table_columns %}
 	<td nowrap>{{ result.object.contract }}</td>
-	<td nowrap>{{ result.object.get_review_display }}</td>
-	<td nowrap>
-		<span class="badge badge-pill badge-info">{{ result.overall_score|floatformat }}</span>
-	</td>
+    <td nowrap>{{ result.object.get_assessment_type_display }}</td>
+    <td nowrap>{{ result.overall_score }}</td>
+    <td nowrap>
+        {% if result.supervisor_signature %}
+            <span class="label label-success">Approved</span>
+        {% else %}
+            <span class="label label-warning">Not Approved</span>
+        {% endif %}
+    </td>
+    <td><a href="{{ result.href }}"><button class="btn btn-primary btn-sm">View</button> </a> </td>
 	{% endblock listboard_table_columns %}
 </tr>
 

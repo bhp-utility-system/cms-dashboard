@@ -25,7 +25,7 @@ class AppraisalListBoardView(
     listboard_panel_style = 'info'
     listboard_fa_icon = "fa-user-plus"
 
-    model = 'bhp_personnel.performanceassessment'
+    model = 'bhp_personnel.appraisal'
     model_wrapper_cls = AppraisalModelWrapper
     navbar_name = 'cms_main_dashboard'
     navbar_selected_item = None
@@ -57,11 +57,10 @@ class AppraisalListBoardView(
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         contract = self.kwargs.get('contract')
-        model_cls = django_apps.get_model('bhp_personnel.performanceassessment')
+        model_cls = django_apps.get_model('bhp_personnel.appraisal')
         wrapped = self.model_wrapper_cls(
             model_cls(contract=self.contract_obj,
                       emp_identifier=self.contract_obj.identifier))
-
         context.update(
             contract=contract,
             employee_obj=self.employee,
@@ -88,7 +87,7 @@ class AppraisalListBoardView(
     def extra_search_options(self, search_term):
         q = Q()
         if re.match('^[A-Z]+$', search_term):
-            q = Q(first_name__exact=search_term)
+            q = Q(assessment_type__exact=search_term)
         return q
 
     def post(self, request, *args, **kwargs):
@@ -169,12 +168,21 @@ class AppraisalListBoardView(
         return django_apps.get_model('bhp_personnel.renewalintent')
 
     @property
+    def renewal_intent_options(self):
+        """Returns a dictionary of options to get an existing
+        renewal intent model instance.
+        """
+        options = dict(
+            contract=self.contract_obj)
+        return options
+
+    @property
     def renewal_intent_wrapped_obj(self):
         model_obj = self.get_renewal_intent
         if model_obj:
             return RenewalIntentModelWrapper(model_obj=model_obj)
         else:
             model_obj = self.renewal_intent_cls(
-                contract=self.contract_obj,
+                **self.renewal_intent_options,
             )
             return RenewalIntentModelWrapper(model_obj=model_obj)
