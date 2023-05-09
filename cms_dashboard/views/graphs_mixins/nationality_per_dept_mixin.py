@@ -1,9 +1,5 @@
-
-from django.apps import apps as django_apps
+from bhp_personnel.models import Department, Employee
 from edc_base.view_mixins import EdcBaseViewMixin
-from bhp_personnel.models import Employee, Department, Contract,Contracting
-import re
-from django.utils.translation import gettext_lazy as _
 
 
 class NationalityMixin(EdcBaseViewMixin):

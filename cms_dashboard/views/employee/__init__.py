@@ -1,3 +1,4 @@
 from .appraisal_listboard import AppraisalListBoardView
+from .edit_personal_details_view import EmployeeUpdateView
 from .employee_dashboard import DashboardView
 from .employee_listboard_view import EmployeeListBoardView

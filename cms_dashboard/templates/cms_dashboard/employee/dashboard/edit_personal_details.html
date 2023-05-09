@@ -1,0 +1,30 @@
+{% extends 'edc_base/base.html' %}
+
+{% block main %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <h1 class="text-center">Update Your Personal Information</h1>
+                <form method="post" class="form-horizontal">
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="form-group{% if field.errors %} has-error{% endif %}">
+                            <label class="col-sm-4 control-label">{{ field.label_tag }}</label>
+                            <div class="col-sm-8">
+                                {{ field }}
+                                {% for error in field.errors %}
+                                    <span class="help-block">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                    <div class="form-group">
+                        <div class="col-sm-offset-4 col-sm-8">
+                            <button type="submit" class="btn btn-primary">Update</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

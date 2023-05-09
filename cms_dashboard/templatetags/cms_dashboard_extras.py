@@ -201,3 +201,15 @@ def renew_intent_button(model_wrapper):
         identifier=model_wrapper.object.contract.identifier,
         add_renewal_intent_href=model_wrapper.href,
         title=' '.join(title))
+
+
+@register.inclusion_tag('cms_dashboard/buttons/edit_personal_details_button.html')
+def edit_personal_info_button(employee):
+    title = ['Edit Personal Details']
+    return dict(
+        employee=employee,
+        title=' '.join(title))
+
+
+def get_display_name(self, field_name):
+    return self._meta.get_field(field_name).verbose_name.title()

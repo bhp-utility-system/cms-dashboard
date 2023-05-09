@@ -14,6 +14,7 @@ from .views import (
 from .views.contract import (
     ConsultantContractListBoardView, EmployeeContractListboardView,
     PiContractListBoardView)
+from .views.employee.edit_personal_details_view import EmployeeUpdateView
 
 app_name = 'cms_dashboard'
 
@@ -95,7 +96,8 @@ pi_contract_dashboard_url_config = UrlConfig(
     identifier_pattern=identifier)
 
 urlpatterns = [
-    # path('dashboard/<identifier>', DashboardView.as_view(), name='dashboard_url'),
+    path('update-info/<slug:slug>/', EmployeeUpdateView.as_view(),
+         name='update_employee_info_url'),
 ]
 
 urlpatterns += [path('cms/', HomeView.as_view(), name='cms_url')]
