@@ -73,7 +73,6 @@ def contracting_button(model_wrapper):
         add_contracting_href=model_wrapper.contracting.href,
         identifier=model_wrapper.contracting.identifier,
         contracting_model_obj=model_wrapper.contracting_model_obj
-        # contracting_model_obj=model_wrapper.contract_model_obj
     )
 
 
@@ -200,5 +199,5 @@ def renew_intent_button(model_wrapper):
     title = ['Submit Renewal Intent']
     return dict(
         identifier=model_wrapper.object.contract.identifier,
-        add_offstudy_href=model_wrapper.href,
+        add_renewal_intent_href=model_wrapper.href,
         title=' '.join(title))
