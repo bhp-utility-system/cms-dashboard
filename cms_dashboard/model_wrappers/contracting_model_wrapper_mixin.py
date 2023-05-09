@@ -35,7 +35,9 @@ class ContractingModelWrapperMixin:
         unpersisted contracting model instance.
         """
         options = dict(
-            identifier=self.object.identifier)
+            identifier=self.object.identifier,
+            contract=self.contract
+        )
         return options
 
     @property
