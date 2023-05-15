@@ -7,29 +7,13 @@ from .kpa_model_wrapper import KpaModelWrapper
 from .kpa_model_wrapper_mixin import KpaModelWrapperMixin
 from .performance_imp_model_wrapper_mixin import \
     PerformanceImpModelWrapperMixin
-from .professional_skills_model_wrapper_mixin import (
-    StrategicOrientationModelWrapperMixin, ResultsFocusModelWrapperMixin,
-    LeadershipAndMotivationModelWrapperMixin,
-    InnovationAndCreativityModelWrapperMixin, PlanningSkillsModelWrapperMixin,
-    InterpersonalSkillsModelWrapperMixin, CommunicationSkillsModelWrapperMixin,
-    KnowledgeAndProductivityModelWrapperMixin, QualityOfWorkModelWrapperMixin)
 
 
 class AppraisalModelWrapper(EmployeeModelWrapperMixin,
-                            PerformanceImpModelWrapperMixin,
                             KpaModelWrapperMixin,
-                            QualityOfWorkModelWrapperMixin,
-                            KnowledgeAndProductivityModelWrapperMixin,
-                            CommunicationSkillsModelWrapperMixin,
-                            InterpersonalSkillsModelWrapperMixin,
-                            PlanningSkillsModelWrapperMixin,
-                            InnovationAndCreativityModelWrapperMixin,
-                            LeadershipAndMotivationModelWrapperMixin,
-                            ResultsFocusModelWrapperMixin,
-                            StrategicOrientationModelWrapperMixin,
                             ModelWrapper):
 
-    model = 'bhp_personnel.performanceassessment'
+    model = 'bhp_personnel.appraisal'
     querystring_attrs = ['contract', 'emp_identifier', ]
     next_url_attrs = ['contract', 'emp_identifier', ]
     next_url_name = settings.DASHBOARD_URL_NAMES.get('appraisal_listboard_url')
@@ -47,17 +31,13 @@ class AppraisalModelWrapper(EmployeeModelWrapperMixin,
         return django_apps.get_model('bhp_personnel.contract')
 
     @property
-    def kpa_cls(self):
-        return django_apps.get_model('bhp_personnel.keyperformancearea')
+    def performance_review_cls(self):
+        return django_apps.get_model('bhp_personnel.performancereview')
 
     @property
-    def kpa_list(self):
-        wrapped_kpas = []
-        kpas = self.kpa_cls.objects.filter(contract=self.contract,
-                                           assessment_period_type=self.object.review)
-        for kpa in kpas:
-            wrapped_kpas.append(KpaModelWrapper(kpa))
-        return wrapped_kpas
+    def performance_review_list(self):
+        performance_review = self.performance_review_cls.objects.filter(appraisal=self.object)
+        return performance_review
 
     def get_professional_skills_scores(self):
         models = ['strategicorientation', 'resultsfocus',
@@ -90,25 +70,11 @@ class AppraisalModelWrapper(EmployeeModelWrapperMixin,
 
     @property
     def overall_score(self):
-        if self.contract:
+        if self.performance_review_list:
             total = 0
-
-            total += self.get_professional_skills_scores()
-
+            for kpa in self.performance_review_list:
+                total += kpa.review_score
             if total > 0:
-                total *= 0.8
-
-            key_performance_cls = django_apps.get_model('bhp_personnel.keyperformancearea')
-
-            key_performance_objs = key_performance_cls.objects.filter(
-                    contract=self.contract,
-                    assessment_period_type=self.object.review)
-
-            total_performance_score = 0
-            for obj in key_performance_objs:
-                if obj.kpa_score:
-                    total_performance_score += float(obj.kpa_score)
-
-            if total_performance_score > 0:
-                total += ((total_performance_score / key_performance_objs.count()) * 0.2)
-            return round(total, 2)
+                total = total / len(self.performance_review_list)
+            return round(total, 1)
+        return None

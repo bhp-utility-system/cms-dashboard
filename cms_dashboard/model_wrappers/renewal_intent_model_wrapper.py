@@ -11,3 +11,16 @@ class RenewalIntentModelWrapper(ModelWrapper):
     @property
     def contract(self):
         return self.object.contract
+
+    @property
+    def emp_identifier(self):
+        return self.object.contract.identifier
+
+    def create_options(self):
+        """Returns a dictionary of options to create a new
+        unpersisted model instance.
+        """
+        options = dict(
+            contract=self.object.contract
+        )
+        return options

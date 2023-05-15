@@ -73,7 +73,6 @@ def contracting_button(model_wrapper):
         add_contracting_href=model_wrapper.contracting.href,
         identifier=model_wrapper.contracting.identifier,
         contracting_model_obj=model_wrapper.contracting_model_obj
-        # contracting_model_obj=model_wrapper.contract_model_obj
     )
 
 
