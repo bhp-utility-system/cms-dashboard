@@ -37,10 +37,5 @@ class ContractingModelWrapper(ModelWrapper):
 
     @property
     def contract(self):
-        contract_cls = django_apps.get_model(self.contract_model_cls)
-        try:
-            obj = contract_cls.objects.filter(identifier=self.identifier).latest('start_date')
-        except contract_cls.DoesNotExist:
-            raise
-        else:
-            return obj
+        if self.object:
+            return self.object.contract
