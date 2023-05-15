@@ -37,5 +37,5 @@ class ContractingModelWrapper(ModelWrapper):
 
     @property
     def contract(self):
-        if self.object:
-            return self.object.contract
+        return self.object.contract
+
