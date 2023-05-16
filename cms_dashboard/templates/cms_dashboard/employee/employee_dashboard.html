@@ -40,31 +40,28 @@
                 </thead>
                 <tbody>
                     {% if not active_contract %}
-                    <td></td>
-                    <td style="white-space: nowrap;">
-                        <div class="btn-group">
-                            {% if request.user|has_group:"HR" or request.user|has_group:"Supervisor"%}
-                            {% contracting_button contract %}
-                            {% if contract.contracting_model_obj %}
-                            <a id="btn-contract"
-                            class="btn btn-default btn-sm"
-                            role="button"
-                            title="add_contract"
-                            href="{{ contract.href }}">
-                            <i class="far fa-user-circle fa-sm"></i>
-                            Add
-                            Contract
-                            </a>
-                            {% endif %}
-                            {% endif %}
-                        </div>
-                    </td>
-                    <td>--</td>
-                    <td>--</td>
-                    <td>--</td>
-                    <td>--</td>
-                    </td>
-                    {% endif %}
+                            <td></td>
+                            <td style="white-space: nowrap;">
+                                <div class="btn-group">
+                                    {% if request.user|has_group:"HR" or request.user|has_group:"Supervisor" %}
+                                        <a id="btn-contract"
+                                           class="btn btn-default btn-sm"
+                                           role="button"
+                                           title="add_contract"
+                                           href="{{ contract.href }}">
+                                            <i class="far fa-user-circle fa-sm"></i> Add
+                                            Contract
+                                        </a>
+                                    {% endif %}
+                                </div>
+
+                            </td>
+                            <td>--</td>
+                            <td>--</td>
+                            <td>--</td>
+                            <td>--</td>
+                            </td>
+                        {% endif %}
                     {% for contract in contracts %}
                     <tr>
                         <td>{{ forloop.counter }}</td>
