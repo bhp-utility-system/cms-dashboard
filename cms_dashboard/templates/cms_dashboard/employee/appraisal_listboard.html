@@ -288,9 +288,15 @@ div.scrollmenu a {
     <td nowrap>{{ result.overall_score }}</td>
     <td nowrap>
         {% if result.supervisor_signature %}
-            <span class="label label-success">Approved</span>
+            <span class="label label-success">Supervisor Approved</span>
         {% else %}
-            <span class="label label-warning">Not Approved</span>
+            <span class="label label-warning">Pending Supervisor</span>
+        {% endif %}
+
+        {% if result.employee_signature %}
+            <span class="label label-success">Employee Approved</span>
+        {% else %}
+            <span class="label label-warning">Pending Employee</span>
         {% endif %}
     </td>
     <td><a href="{{ result.href }}"><button class="btn btn-primary btn-sm">View</button> </a> </td>
