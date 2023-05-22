@@ -143,7 +143,7 @@
             </div>
         </div>
         <div class="panel panel-info">
-            <div class="panel-heading">Demographics{% edit_personal_info_button employee %}</div>
+            <div class="panel-heading">Demographics {% if request.user.email == employee.email %}{% edit_personal_info_button employee %}{% endif %}</div>
                 <div class="panel-body">
                     <b>Name:</b> {{employee.first_name}} {{employee.middle_name}} {{employee.last_name}}</br>
                     <b>Title:</b> {{employee.get_title_salutation_display}}</br>
